@@ -1,0 +1,11 @@
+[
+{
+  "modid": "com.kanomiya.mcmod.touchablemattercraft",
+  "name": "Touchable Matter Craft",
+  "description": "WIP",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "authorList": ["Kanomiya"]
+}
+]

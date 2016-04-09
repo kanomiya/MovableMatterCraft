@@ -1,0 +1,29 @@
+﻿###-- Japanese --###
+
+itemGroup.com.kanomiya.mcmod.touchablemattercraft=Touchable Matter Craft
+
+item.itemMatter.name=物質
+
+matter=組成
+matter.form=形状
+
+matter.type.wood.name=木材
+matter.type.wood_oak.name=オーク材
+matter.type.wood_spruce.name=松材
+matter.type.wood_birch.name=白樺材
+matter.type.wood_jungle.name=ジャングル材
+matter.type.wood_acacia.name=アカシア材
+matter.type.wood_dark_oak.name=ダークオーク材
+
+matter.type.stone.name=石
+matter.type.stone_granite.name=花崗岩
+matter.type.stone_diorite.name=閃緑岩
+matter.type.stone_andesite.name=安山岩
+
+matter.type.iron.name=鉄
+matter.type.gold.name=金
+matter.type.diamond.name=ダイヤモンド
+
+
+matter.form.block.name=ブロック
+matter.form.ingot.name=インゴット
