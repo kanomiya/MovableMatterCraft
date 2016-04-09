@@ -3,7 +3,7 @@ package com.kanomiya.mcmod.touchablecontainercraft.api.matter.machine;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 
-import com.kanomiya.mcmod.touchablecontainercraft.api.matter.Matter;
+import com.kanomiya.mcmod.touchablecontainercraft.api.matter.IMatter;
 
 /**
  * @author Kanomiya
@@ -11,6 +11,6 @@ import com.kanomiya.mcmod.touchablecontainercraft.api.matter.Matter;
  */
 public interface IMatterImporter
 {
-	boolean importMatter(ItemStack matterStack, Matter matter, EnumFacing facing);
+	boolean importMatter(ItemStack matterStack, IMatter iMatter, EnumFacing facing);
 
 }

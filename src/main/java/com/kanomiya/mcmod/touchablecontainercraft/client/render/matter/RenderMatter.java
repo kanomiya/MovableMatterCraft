@@ -6,8 +6,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.kanomiya.mcmod.touchablecontainercraft.api.client.render.IMatterModel;
 import com.kanomiya.mcmod.touchablecontainercraft.entity.EntityMatter;
+import com.kanomiya.mcmod.touchablecontainercraft.matter.property.DefaultMatterProperties;
+import com.kanomiya.mcmod.touchablecontainercraft.matter.property.model.IMatterModel;
 
 @SideOnly(Side.CLIENT)
 public class RenderMatter extends Render<EntityMatter>
@@ -24,7 +25,7 @@ public class RenderMatter extends Render<EntityMatter>
 		if (entity.getMatter() == null) return ;
 
 		bindEntityTexture(entity);
-		IMatterModel<EntityMatter, IMatterModel> model = entity.getMatter().getMatterModel();
+		IMatterModel<EntityMatter, IMatterModel> model = entity.getMatter().getValue(DefaultMatterProperties.MODEL);
 
 		if (model != null)
 		{

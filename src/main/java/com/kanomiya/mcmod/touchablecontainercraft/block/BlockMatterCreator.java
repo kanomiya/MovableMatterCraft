@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 
 import com.kanomiya.mcmod.touchablecontainercraft.TouchableMatterCraft;
 import com.kanomiya.mcmod.touchablecontainercraft.api.TouchableMatterCraftAPI;
-import com.kanomiya.mcmod.touchablecontainercraft.api.matter.Matter;
+import com.kanomiya.mcmod.touchablecontainercraft.api.matter.IMatter;
 import com.kanomiya.mcmod.touchablecontainercraft.entity.EntityMatter;
 import com.kanomiya.mcmod.touchablecontainercraft.registry.MatterMappingRegistry;
 
@@ -29,6 +29,7 @@ public class BlockMatterCreator extends Block
 
 		setCreativeTab(TouchableMatterCraft.tab);
 		setRegistryName(new ResourceLocation(TouchableMatterCraft.MODID, "blockMatterCreator"));
+		setUnlocalizedName("blockMatterCreator");
 		setHardness(0.5f);
 	}
 
@@ -41,12 +42,12 @@ public class BlockMatterCreator extends Block
 
 			if (newStack.hasCapability(TouchableMatterCraftAPI.capMatter, null))
 			{
-				Matter stackMatter = newStack.getCapability(TouchableMatterCraftAPI.capMatter, null);
-				Matter matter = MatterMappingRegistry.INSTANCE.createFromItemStack(heldItem);
+				IMatter stackMatter = newStack.getCapability(TouchableMatterCraftAPI.capMatter, null);
+				IMatter iMatter = MatterMappingRegistry.INSTANCE.createFromItemStack(heldItem);
 
-				if (matter != null)
+				if (iMatter != null)
 				{
-					stackMatter.deserializeNBT(matter.serializeNBT());
+					stackMatter.deserializeNBT(iMatter.serializeNBT());
 
 					EntityMatter newEntity = new EntityMatter(worldIn, pos.getX() +hitX, pos.getY() +Math.min(hitY +0.5d, 1.2d), pos.getZ() +hitZ, newStack);
 					newEntity.motionX = 0.3d < RANDOM.nextDouble() ? 0.1d : 0d;

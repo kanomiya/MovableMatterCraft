@@ -1,6 +1,5 @@
-package com.kanomiya.mcmod.touchablecontainercraft.matter.form;
+package com.kanomiya.mcmod.touchablecontainercraft.matter.property.form;
 
-import com.kanomiya.mcmod.touchablecontainercraft.api.matter.form.SimpleMatterForm;
 
 /**
  * @author Kanomiya

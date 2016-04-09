@@ -22,7 +22,9 @@ import net.minecraftforge.common.util.Constants.NBT;
 import com.google.common.base.Optional;
 import com.kanomiya.mcmod.touchablecontainercraft.TouchableMatterCraft;
 import com.kanomiya.mcmod.touchablecontainercraft.api.TouchableMatterCraftAPI;
-import com.kanomiya.mcmod.touchablecontainercraft.api.matter.Matter;
+import com.kanomiya.mcmod.touchablecontainercraft.api.matter.IMatter;
+import com.kanomiya.mcmod.touchablecontainercraft.matter.property.DefaultMatterProperties;
+import com.kanomiya.mcmod.touchablecontainercraft.matter.property.form.IMatterForm;
 
 /**
  * @author Kanomiya
@@ -63,14 +65,14 @@ public class EntityMatter extends Entity
 		setMatterStack(matterStack);
 	}
 
-	public EntityMatter(World worldIn, double posX, double posY, double posZ, Matter matter)
+	public EntityMatter(World worldIn, double posX, double posY, double posZ, IMatter iMatter)
 	{
 		this(worldIn, posX, posY, posZ);
 
 		ItemStack matterStack = new ItemStack(TouchableMatterCraft.itemMatter, 1, 0);
 		if (matterStack.hasCapability(TouchableMatterCraftAPI.capMatter, null))
 		{
-			matterStack.getCapability(TouchableMatterCraftAPI.capMatter, null).deserializeNBT(matter.serializeNBT());;
+			matterStack.getCapability(TouchableMatterCraftAPI.capMatter, null).deserializeNBT(iMatter.serializeNBT());;
 		}
 
 		setMatterStack(matterStack);
@@ -137,14 +139,14 @@ public class EntityMatter extends Entity
 		{
 			if (worldObj.getGameRules().getBoolean("doEntityDrops"))
 			{
-				Matter matter = getMatter();
+				IMatter iMatter = getMatter();
 
-				if (matter != null)
+				if (iMatter != null)
 				{
 					ItemStack drop = new ItemStack(TouchableMatterCraft.itemMatter, 1, 0);
 					if (drop.hasCapability(TouchableMatterCraftAPI.capMatter, null))
 					{
-						drop.getCapability(TouchableMatterCraftAPI.capMatter, null).deserializeNBT(matter.serializeNBT());
+						drop.getCapability(TouchableMatterCraftAPI.capMatter, null).deserializeNBT(iMatter.serializeNBT());
 					}
 
 					entityDropItem(drop, 1.0f);
@@ -195,17 +197,21 @@ public class EntityMatter extends Entity
 		{
 			if (stack.hasCapability(TouchableMatterCraftAPI.capMatter, null))
 			{
-				Matter stackMatter = stack.getCapability(TouchableMatterCraftAPI.capMatter, null);
-				Matter myMatter = getMatter();
+				IMatter stackMatter = stack.getCapability(TouchableMatterCraftAPI.capMatter, null);
+				IMatter myMatter = getMatter();
 
-				if (myMatter.getMatterType() == stackMatter.getMatterType()
-						&& myMatter.getMatterForm() == stackMatter.getMatterForm()
-						&& myMatter.getAmount() +stackMatter.getAmount() <= myMatter.getMatterForm().getMaxAmount())
+				int stackAmount = stackMatter.getValue(DefaultMatterProperties.AMOUNT);
+				int myAmount = myMatter.getValue(DefaultMatterProperties.AMOUNT);
+				IMatterForm myForm = myMatter.getValue(DefaultMatterProperties.FORM);
+
+				if (myMatter.getValue(DefaultMatterProperties.TYPE) == stackMatter.getValue(DefaultMatterProperties.TYPE)
+						&& myForm == stackMatter.getValue(DefaultMatterProperties.FORM)
+						&& (myForm == null || myAmount +stackAmount <= myForm.getMaxAmount()))
 				{
 					if (! worldObj.isRemote)
 					{
-						myMatter.setAmount(stackMatter.getAmount() +myMatter.getAmount());
-						stackMatter.setAmount(0);
+						myMatter.withProperty(DefaultMatterProperties.AMOUNT, stackAmount +myAmount);
+						stackMatter.withProperty(DefaultMatterProperties.AMOUNT, 0);
 					}
 
 					stack.stackSize = 0;
@@ -229,17 +235,17 @@ public class EntityMatter extends Entity
 
 		if (player.isSneaking())
 		{
-			Matter myMatter = getMatter();
-			if (2 <= myMatter.getAmount())
+			IMatter myMatter = getMatter();
+			if (2 <= myMatter.getValue(DefaultMatterProperties.AMOUNT))
 			{
 				ItemStack newStack = new ItemStack(TouchableMatterCraft.itemMatter, 1);
 
 				if (newStack.hasCapability(TouchableMatterCraftAPI.capMatter, null))
 				{
-					Matter newMatter = newStack.getCapability(TouchableMatterCraftAPI.capMatter, null);
-
-					newMatter.setAmount(1);
-					newMatter.setMatterTypeAndForm(myMatter.getMatterType(), myMatter.getMatterForm());
+					newStack.getCapability(TouchableMatterCraftAPI.capMatter, null)
+						.withProperty(DefaultMatterProperties.AMOUNT, 1)
+						.withProperty(DefaultMatterProperties.FORM, myMatter.getValue(DefaultMatterProperties.FORM))
+						.withProperty(DefaultMatterProperties.TYPE, myMatter.getValue(DefaultMatterProperties.TYPE));
 
 					EntityMatter newEntity = new EntityMatter(worldObj, posX, posY +0.7d, posZ, newStack);
 					newEntity.motionX = 0.3d < rand.nextDouble() ? 0.1d : 0d;
@@ -250,7 +256,7 @@ public class EntityMatter extends Entity
 					{
 						worldObj.spawnEntityInWorld(newEntity);
 
-						myMatter.setAmount(myMatter.getAmount() -1);
+						myMatter.withProperty(DefaultMatterProperties.AMOUNT, myMatter.getValue(DefaultMatterProperties.AMOUNT) -1);
 					}
 
 					return EnumActionResult.SUCCESS;
@@ -278,7 +284,7 @@ public class EntityMatter extends Entity
 		dataWatcher.set(MATTER_STACK, Optional.of(stack));
 	}
 
-	public Matter getMatter()
+	public IMatter getMatter()
 	{
 		return hasMatterStack() && getMatterStack().hasCapability(TouchableMatterCraftAPI.capMatter, null) ? getMatterStack().getCapability(TouchableMatterCraftAPI.capMatter, null) : null;
 	}

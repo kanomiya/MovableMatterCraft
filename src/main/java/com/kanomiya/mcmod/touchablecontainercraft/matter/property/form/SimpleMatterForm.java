@@ -1,4 +1,4 @@
-package com.kanomiya.mcmod.touchablecontainercraft.api.matter.form;
+package com.kanomiya.mcmod.touchablecontainercraft.matter.property.form;
 
 
 

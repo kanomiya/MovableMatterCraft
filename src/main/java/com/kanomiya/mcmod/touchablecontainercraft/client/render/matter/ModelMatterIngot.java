@@ -3,9 +3,9 @@ package com.kanomiya.mcmod.touchablecontainercraft.client.render.matter;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
-import com.kanomiya.mcmod.touchablecontainercraft.api.client.render.IMatterModel;
-import com.kanomiya.mcmod.touchablecontainercraft.api.client.render.IMatterModelRender;
+import com.kanomiya.mcmod.touchablecontainercraft.client.render.IMatterModelRender;
 import com.kanomiya.mcmod.touchablecontainercraft.entity.EntityMatter;
+import com.kanomiya.mcmod.touchablecontainercraft.matter.property.model.IMatterModel;
 
 /**
  * @author Kanomiya

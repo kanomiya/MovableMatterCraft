@@ -3,7 +3,7 @@ package com.kanomiya.mcmod.touchablecontainercraft.api;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 
-import com.kanomiya.mcmod.touchablecontainercraft.api.matter.Matter;
+import com.kanomiya.mcmod.touchablecontainercraft.api.matter.IMatter;
 
 /**
  * @author Kanomiya
@@ -11,7 +11,7 @@ import com.kanomiya.mcmod.touchablecontainercraft.api.matter.Matter;
  */
 public class TouchableMatterCraftAPI
 {
-	@CapabilityInject(Matter.class)
-	public static final Capability<Matter> capMatter = null;
+	@CapabilityInject(IMatter.class)
+	public static final Capability<IMatter> capMatter = null;
 
 }

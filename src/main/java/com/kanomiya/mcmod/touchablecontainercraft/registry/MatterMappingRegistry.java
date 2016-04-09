@@ -14,9 +14,11 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.kanomiya.mcmod.touchablecontainercraft.TouchableMatterCraft;
 import com.kanomiya.mcmod.touchablecontainercraft.api.TouchableMatterCraftAPI;
-import com.kanomiya.mcmod.touchablecontainercraft.api.matter.Matter;
-import com.kanomiya.mcmod.touchablecontainercraft.matter.form.DefaultMatterForms;
-import com.kanomiya.mcmod.touchablecontainercraft.matter.type.DefaultMatterTypes;
+import com.kanomiya.mcmod.touchablecontainercraft.api.matter.IMatter;
+import com.kanomiya.mcmod.touchablecontainercraft.matter.Matter;
+import com.kanomiya.mcmod.touchablecontainercraft.matter.property.DefaultMatterProperties;
+import com.kanomiya.mcmod.touchablecontainercraft.matter.property.form.DefaultMatterForms;
+import com.kanomiya.mcmod.touchablecontainercraft.matter.property.type.DefaultMatterTypes;
 
 
 /**
@@ -27,26 +29,26 @@ public class MatterMappingRegistry
 {
 	public static final MatterMappingRegistry INSTANCE = new MatterMappingRegistry();
 
-	public BiMap<ItemStack, Supplier<Matter>> itemRegistry = HashBiMap.create();
-	public BiMap<IBlockState, Supplier<Matter>> blockRegistry = HashBiMap.create();
+	public BiMap<ItemStack, Supplier<IMatter>> itemRegistry = HashBiMap.create();
+	public BiMap<IBlockState, Supplier<IMatter>> blockRegistry = HashBiMap.create();
 
 	protected MatterMappingRegistry() {  }
 
 
-	public Matter createFromBlockState(IBlockState blockState)
+	public IMatter createFromBlockState(IBlockState blockState)
 	{
 		if (blockState == null) return null;
 
 		if (blockRegistry.containsKey(blockState))
 		{
-			Matter matter = blockRegistry.get(blockState).get();
-			if (matter != null) return matter;
+			IMatter iMatter = blockRegistry.get(blockState).get();
+			if (iMatter != null) return iMatter;
 		}
 
 		return null;
 	}
 
-	public Matter createFromItemStack(ItemStack stack)
+	public IMatter createFromItemStack(ItemStack stack)
 	{
 		if (stack == null) return null;
 
@@ -54,8 +56,8 @@ public class MatterMappingRegistry
 		{
 			IBlockState blockState = ((ItemBlock) stack.getItem()).getBlock().getStateFromMeta(stack.getMetadata());
 
-			Matter matter = createFromBlockState(blockState);
-			if (matter != null) return matter;
+			IMatter iMatter = createFromBlockState(blockState);
+			if (iMatter != null) return iMatter;
 		}
 
 		for (ItemStack s: itemRegistry.keySet())
@@ -65,12 +67,12 @@ public class MatterMappingRegistry
 				ItemStack matterStack = new ItemStack(TouchableMatterCraft.itemMatter, 1, 0);
 				if (matterStack.hasCapability(TouchableMatterCraftAPI.capMatter, null))
 				{
-					Matter matter = matterStack.getCapability(TouchableMatterCraftAPI.capMatter, null);
-					Matter newMatter = itemRegistry.get(s).get();
+					IMatter iMatter = matterStack.getCapability(TouchableMatterCraftAPI.capMatter, null);
+					IMatter newMatter = itemRegistry.get(s).get();
 
-					matter.deserializeNBT(newMatter.serializeNBT());
+					iMatter.deserializeNBT(newMatter.serializeNBT());
 
-					return matter;
+					return iMatter;
 				}
 
 			}
@@ -81,26 +83,27 @@ public class MatterMappingRegistry
 
 	public void registerDefaultItemMappings() // TODO 認識部分、Creator
 	{
-		itemRegistry.put(new ItemStack(Items.iron_ingot, 1, 0), () -> new Matter(DefaultMatterTypes.IRON, DefaultMatterForms.INGOT));
-		itemRegistry.put(new ItemStack(Items.gold_ingot, 1, 0), () -> new Matter(DefaultMatterTypes.GOLD, DefaultMatterForms.INGOT));
+		itemRegistry.put(new ItemStack(Items.iron_ingot, 1, 0), () -> new Matter().withProperty(DefaultMatterProperties.TYPE, DefaultMatterTypes.IRON).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.INGOT));
+		itemRegistry.put(new ItemStack(Items.gold_ingot, 1, 0), () -> new Matter().withProperty(DefaultMatterProperties.TYPE, DefaultMatterTypes.GOLD).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.INGOT));
 
 	}
 
 	public void registerDefaultBlockMappings()
 	{
-		blockRegistry.put(Blocks.planks.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.OAK), () -> new Matter(DefaultMatterTypes.WOOD_OAK, DefaultMatterForms.BLOCK));
-		blockRegistry.put(Blocks.planks.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.SPRUCE), () -> new Matter(DefaultMatterTypes.WOOD_SPRUCE, DefaultMatterForms.BLOCK));
-		blockRegistry.put(Blocks.planks.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.BIRCH), () -> new Matter(DefaultMatterTypes.WOOD_BIRCH, DefaultMatterForms.BLOCK));
-		blockRegistry.put(Blocks.planks.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.JUNGLE), () -> new Matter(DefaultMatterTypes.WOOD_JUNGLE, DefaultMatterForms.BLOCK));
-		blockRegistry.put(Blocks.planks.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.ACACIA), () -> new Matter(DefaultMatterTypes.WOOD_ACACIA, DefaultMatterForms.BLOCK));
-		blockRegistry.put(Blocks.planks.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.DARK_OAK), () -> new Matter(DefaultMatterTypes.WOOD_DARK_OAK, DefaultMatterForms.BLOCK));
+		blockRegistry.put(Blocks.planks.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.OAK), () -> new Matter().withProperty(DefaultMatterProperties.TYPE, DefaultMatterTypes.WOOD_OAK).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.BLOCK));
+		blockRegistry.put(Blocks.planks.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.SPRUCE), () -> new Matter().withProperty(DefaultMatterProperties.TYPE, DefaultMatterTypes.WOOD_SPRUCE).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.BLOCK));
+		blockRegistry.put(Blocks.planks.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.BIRCH), () -> new Matter().withProperty(DefaultMatterProperties.TYPE, DefaultMatterTypes.WOOD_BIRCH).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.BLOCK));
+		blockRegistry.put(Blocks.planks.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.JUNGLE), () -> new Matter().withProperty(DefaultMatterProperties.TYPE, DefaultMatterTypes.WOOD_JUNGLE).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.BLOCK));
+		blockRegistry.put(Blocks.planks.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.ACACIA), () -> new Matter().withProperty(DefaultMatterProperties.TYPE, DefaultMatterTypes.WOOD_ACACIA).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.BLOCK));
+		blockRegistry.put(Blocks.planks.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.DARK_OAK), () -> new Matter().withProperty(DefaultMatterProperties.TYPE, DefaultMatterTypes.WOOD_DARK_OAK).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.BLOCK));
 
-		blockRegistry.put(Blocks.stone.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.STONE), () -> new Matter(DefaultMatterTypes.STONE, DefaultMatterForms.BLOCK));
-		blockRegistry.put(Blocks.stone.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.DIORITE), () -> new Matter(DefaultMatterTypes.STONE_DIORITE, DefaultMatterForms.BLOCK));
-		blockRegistry.put(Blocks.stone.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.GRANITE), () -> new Matter(DefaultMatterTypes.STONE_GRANITE, DefaultMatterForms.BLOCK));
-		blockRegistry.put(Blocks.stone.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.ANDESITE), () -> new Matter(DefaultMatterTypes.STONE_ANDESITE, DefaultMatterForms.BLOCK));
+		blockRegistry.put(Blocks.stone.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.STONE), () -> new Matter().withProperty(DefaultMatterProperties.TYPE, DefaultMatterTypes.STONE).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.BLOCK));
+		blockRegistry.put(Blocks.stone.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.DIORITE), () -> new Matter().withProperty(DefaultMatterProperties.TYPE, DefaultMatterTypes.STONE_DIORITE).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.BLOCK));
+		blockRegistry.put(Blocks.stone.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.GRANITE), () -> new Matter().withProperty(DefaultMatterProperties.TYPE, DefaultMatterTypes.STONE_GRANITE).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.BLOCK));;
+		blockRegistry.put(Blocks.stone.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.ANDESITE), () -> new Matter().withProperty(DefaultMatterProperties.TYPE, DefaultMatterTypes.STONE_ANDESITE).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.BLOCK));
 
-		blockRegistry.put(Blocks.iron_block.getDefaultState(), () -> new Matter(DefaultMatterTypes.IRON, DefaultMatterForms.BLOCK));
+		blockRegistry.put(Blocks.iron_block.getDefaultState(), () ->  new Matter().withProperty(DefaultMatterProperties.TYPE, DefaultMatterTypes.IRON).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.BLOCK));
+		blockRegistry.put(Blocks.gold_block.getDefaultState(), () ->  new Matter().withProperty(DefaultMatterProperties.TYPE, DefaultMatterTypes.GOLD).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.BLOCK));
 
 	}
 

@@ -1,7 +1,5 @@
-package com.kanomiya.mcmod.touchablecontainercraft.matter.type;
+package com.kanomiya.mcmod.touchablecontainercraft.matter.property.type;
 
-import com.kanomiya.mcmod.touchablecontainercraft.api.matter.type.IMatterType;
-import com.kanomiya.mcmod.touchablecontainercraft.api.matter.type.SimpleMatterType;
 
 /**
  * @author Kanomiya

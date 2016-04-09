@@ -22,10 +22,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.kanomiya.mcmod.touchablecontainercraft.TouchableMatterCraft;
 import com.kanomiya.mcmod.touchablecontainercraft.api.TouchableMatterCraftAPI;
-import com.kanomiya.mcmod.touchablecontainercraft.api.matter.Matter;
-import com.kanomiya.mcmod.touchablecontainercraft.api.matter.form.IMatterForm;
-import com.kanomiya.mcmod.touchablecontainercraft.api.matter.type.IMatterType;
+import com.kanomiya.mcmod.touchablecontainercraft.api.matter.IMatter;
 import com.kanomiya.mcmod.touchablecontainercraft.entity.EntityMatter;
+import com.kanomiya.mcmod.touchablecontainercraft.matter.property.DefaultMatterProperties;
+import com.kanomiya.mcmod.touchablecontainercraft.matter.property.form.IMatterForm;
+import com.kanomiya.mcmod.touchablecontainercraft.matter.property.type.IMatterType;
 import com.kanomiya.mcmod.touchablecontainercraft.registry.MatterRegistry;
 
 /**
@@ -49,18 +50,18 @@ public class ItemMatter extends Item
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems)
 	{
-		subItems.add(new ItemStack(this, 1));
 
-		for (IMatterType type: MatterRegistry.INSTANCE.typeRegistry.values())
+		for (IMatterType type: MatterRegistry.typeRegistry.values())
 		{
-			for (IMatterForm form: MatterRegistry.INSTANCE.formRegistry.values())
+			for (IMatterForm form: MatterRegistry.formRegistry.values())
 			{
 				ItemStack stack = new ItemStack(this, 1, 0);
 
 				if (stack.hasCapability(TouchableMatterCraftAPI.capMatter, null))
 				{
-					Matter matter = stack.getCapability(TouchableMatterCraftAPI.capMatter, null);
-					matter.setMatterTypeAndForm(type, form);
+					stack.getCapability(TouchableMatterCraftAPI.capMatter, null)
+						.withProperty(DefaultMatterProperties.TYPE, type)
+						.withProperty(DefaultMatterProperties.FORM, form);
 
 					subItems.add(stack);
 				}
@@ -75,8 +76,8 @@ public class ItemMatter extends Item
 	{
 		if (stack.hasCapability(TouchableMatterCraftAPI.capMatter, null))
 		{
-			Matter matter = stack.getCapability(TouchableMatterCraftAPI.capMatter, null);
-			return matter.getDisplayName();
+			IMatter iMatter = stack.getCapability(TouchableMatterCraftAPI.capMatter, null);
+			return iMatter.getDisplayName();
 		}
 
 		return super.getItemStackDisplayName(stack);
@@ -88,8 +89,8 @@ public class ItemMatter extends Item
 	{
 		if (stack.hasCapability(TouchableMatterCraftAPI.capMatter, null))
 		{
-			Matter matter = stack.getCapability(TouchableMatterCraftAPI.capMatter, null);
-			matter.addInformation(tooltip);
+			IMatter iMatter = stack.getCapability(TouchableMatterCraftAPI.capMatter, null);
+			iMatter.addInformation(tooltip);
 		}
 
 	}

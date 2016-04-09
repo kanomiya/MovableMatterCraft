@@ -4,7 +4,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
-import com.kanomiya.mcmod.touchablecontainercraft.api.matter.Matter;
+import com.kanomiya.mcmod.touchablecontainercraft.api.matter.IMatter;
 import com.kanomiya.mcmod.touchablecontainercraft.api.matter.machine.IMatterImporter;
 import com.kanomiya.mcmod.touchablecontainercraft.entity.EntityMatter;
 
@@ -19,7 +19,7 @@ public class TileEntityMatterCutter extends TileEntity implements IMatterImporte
 	* @inheritDoc
 	*/
 	@Override
-	public boolean importMatter(ItemStack matterStack, Matter matter, EnumFacing facing)
+	public boolean importMatter(ItemStack matterStack, IMatter iMatter, EnumFacing facing)
 	{
 		// TODO: matter.setMatterForm();
 

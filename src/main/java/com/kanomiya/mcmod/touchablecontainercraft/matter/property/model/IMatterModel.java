@@ -1,4 +1,6 @@
-package com.kanomiya.mcmod.touchablecontainercraft.api.client.render;
+package com.kanomiya.mcmod.touchablecontainercraft.matter.property.model;
+
+import com.kanomiya.mcmod.touchablecontainercraft.client.render.IMatterModelRender;
 
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.Entity;

@@ -1,4 +1,4 @@
-package com.kanomiya.mcmod.touchablecontainercraft.api.matter.form;
+package com.kanomiya.mcmod.touchablecontainercraft.matter.property.form;
 
 import net.minecraft.util.text.translation.I18n;
 

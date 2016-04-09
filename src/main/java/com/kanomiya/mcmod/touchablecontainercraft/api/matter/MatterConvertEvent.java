@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 public class MatterConvertEvent<T> extends Event
 {
 	protected T object;
-	protected Matter matter;
+	protected IMatter iMatter;
 
 	public MatterConvertEvent(T object)
 	{
@@ -24,14 +24,14 @@ public class MatterConvertEvent<T> extends Event
 		return object;
 	}
 
-	public Matter getMatter()
+	public IMatter getMatter()
 	{
-		return matter;
+		return iMatter;
 	}
 
-	public void setMatter(Matter matter)
+	public void setMatter(IMatter iMatter)
 	{
-		this.matter = matter;
+		this.iMatter = iMatter;
 	}
 
 

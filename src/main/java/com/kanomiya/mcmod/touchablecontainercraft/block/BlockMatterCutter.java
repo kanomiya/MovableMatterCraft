@@ -23,6 +23,7 @@ public class BlockMatterCutter extends BlockContainer
 
 		setCreativeTab(TouchableMatterCraft.tab);
 		setRegistryName(new ResourceLocation(TouchableMatterCraft.MODID, "blockMatterCutter"));
+		setUnlocalizedName("blockMatterCutter");
 		setHardness(0.5f);
 	}
 

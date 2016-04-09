@@ -25,8 +25,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.apache.logging.log4j.Logger;
 
-import com.kanomiya.mcmod.touchablecontainercraft.api.matter.Matter;
-import com.kanomiya.mcmod.touchablecontainercraft.api.matter.event.MatterModelBakeEvent;
+import com.kanomiya.mcmod.touchablecontainercraft.api.matter.IMatter;
 import com.kanomiya.mcmod.touchablecontainercraft.block.BlockMatterCreator;
 import com.kanomiya.mcmod.touchablecontainercraft.block.BlockMatterCutter;
 import com.kanomiya.mcmod.touchablecontainercraft.client.render.matter.ModelMatterBlock;
@@ -34,8 +33,13 @@ import com.kanomiya.mcmod.touchablecontainercraft.client.render.matter.ModelMatt
 import com.kanomiya.mcmod.touchablecontainercraft.client.render.matter.RenderMatter;
 import com.kanomiya.mcmod.touchablecontainercraft.entity.EntityMatter;
 import com.kanomiya.mcmod.touchablecontainercraft.item.ItemMatter;
-import com.kanomiya.mcmod.touchablecontainercraft.matter.form.DefaultMatterForms;
-import com.kanomiya.mcmod.touchablecontainercraft.matter.type.DefaultMatterTypes;
+import com.kanomiya.mcmod.touchablecontainercraft.matter.Matter;
+import com.kanomiya.mcmod.touchablecontainercraft.matter.event.MatterModelBakeEvent;
+import com.kanomiya.mcmod.touchablecontainercraft.matter.property.DefaultMatterProperties;
+import com.kanomiya.mcmod.touchablecontainercraft.matter.property.form.DefaultMatterForms;
+import com.kanomiya.mcmod.touchablecontainercraft.matter.property.form.IMatterForm;
+import com.kanomiya.mcmod.touchablecontainercraft.matter.property.type.DefaultMatterTypes;
+import com.kanomiya.mcmod.touchablecontainercraft.matter.property.type.IMatterType;
 import com.kanomiya.mcmod.touchablecontainercraft.network.PacketHandler;
 import com.kanomiya.mcmod.touchablecontainercraft.registry.MatterMappingRegistry;
 import com.kanomiya.mcmod.touchablecontainercraft.registry.MatterRegistry;
@@ -72,16 +76,18 @@ public class TouchableMatterCraft
 		GameRegistry.register(itemMatter);
 		GameRegistry.register(blockMatterCreator);
 		GameRegistry.register(new ItemBlock(blockMatterCreator).setRegistryName(blockMatterCreator.getRegistryName()));
-
 		GameRegistry.register(blockMatterCutter);
+		GameRegistry.register(new ItemBlock(blockMatterCutter).setRegistryName(blockMatterCutter.getRegistryName()));
+
 		GameRegistry.registerTileEntity(TileEntityMatterCutter.class, TouchableMatterCraft.MODID + ":tileEntityMatterCutter");
 
 		int eId = -1;
 		EntityRegistry.registerModEntity(EntityMatter.class, "entityMatter", ++eId, TouchableMatterCraft.instance, 64, 1, false);
 
-		MatterRegistry.INSTANCE.registerDefaultTypes();
-		MatterRegistry.INSTANCE.registerDefaultForms();
-		MatterRegistry.INSTANCE.registerDefaultModels();
+		MatterRegistry.registerDefaultProperties();
+		MatterRegistry.registerDefaultTypes();
+		MatterRegistry.registerDefaultForms();
+		MatterRegistry.registerDefaultModels();
 
 		MatterMappingRegistry.INSTANCE.registerDefaultItemMappings();
 		MatterMappingRegistry.INSTANCE.registerDefaultBlockMappings();
@@ -94,12 +100,12 @@ public class TouchableMatterCraft
 
 			ForgeHooksClient.renderTileItem(itemMatter, 0);
 
-			MatterRegistry.INSTANCE.registerDefaultRenders();
+			MatterRegistry.registerDefaultRenders();
 
 
 		}
 
-		CapabilityManager.INSTANCE.register(Matter.class, new Matter.Storage(), () -> new Matter(DefaultMatterTypes.STONE, DefaultMatterForms.BLOCK));
+		CapabilityManager.INSTANCE.register(Matter.class, new IMatter.Storage(), Matter::new);
 		MinecraftForge.EVENT_BUS.register(this);
 
 	}
@@ -123,64 +129,67 @@ public class TouchableMatterCraft
 	@SubscribeEvent
 	public void onAttachItemCapabilities(AttachCapabilitiesEvent.Item event)
 	{
-		if (event.getItem() == TouchableMatterCraft.itemMatter) event.addCapability(new ResourceLocation(TouchableMatterCraft.MODID), new Matter(DefaultMatterTypes.STONE, DefaultMatterForms.BLOCK));
+		if (event.getItem() == TouchableMatterCraft.itemMatter) event.addCapability(new ResourceLocation(TouchableMatterCraft.MODID), new Matter());
 
 	}
 
 	@SubscribeEvent
 	public void onMatterModelBake(MatterModelBakeEvent event)
 	{
-		Matter matter = event.getMatter();
+		IMatter matter = event.getMatter();
 		event.setMatterModel(new ModelMatterBlock(Blocks.fire.getDefaultState()));
 
-		if (matter.getMatterType() == DefaultMatterTypes.WOOD || matter.getMatterType().isVariantOf(DefaultMatterTypes.WOOD, true))
+		IMatterType matterType = matter.getValue(DefaultMatterProperties.TYPE);
+		IMatterForm matterForm = matter.getValue(DefaultMatterProperties.FORM);
+
+		if (matterType == DefaultMatterTypes.WOOD || matterType.isVariantOf(DefaultMatterTypes.WOOD, true))
 		{
 			BlockPlanks.EnumType type = null;
 
-			if (matter.getMatterType() == DefaultMatterTypes.WOOD_OAK) type = BlockPlanks.EnumType.OAK;
-			else if (matter.getMatterType() == DefaultMatterTypes.WOOD_SPRUCE) type = BlockPlanks.EnumType.SPRUCE;
-			else if (matter.getMatterType() == DefaultMatterTypes.WOOD_BIRCH) type = BlockPlanks.EnumType.BIRCH;
-			else if (matter.getMatterType() == DefaultMatterTypes.WOOD_JUNGLE) type = BlockPlanks.EnumType.JUNGLE;
-			else if (matter.getMatterType() == DefaultMatterTypes.WOOD_ACACIA) type = BlockPlanks.EnumType.ACACIA;
-			else if (matter.getMatterType() == DefaultMatterTypes.WOOD_DARK_OAK) type = BlockPlanks.EnumType.DARK_OAK;
+			if (matterType == DefaultMatterTypes.WOOD_OAK) type = BlockPlanks.EnumType.OAK;
+			else if (matterType == DefaultMatterTypes.WOOD_SPRUCE) type = BlockPlanks.EnumType.SPRUCE;
+			else if (matterType == DefaultMatterTypes.WOOD_BIRCH) type = BlockPlanks.EnumType.BIRCH;
+			else if (matterType == DefaultMatterTypes.WOOD_JUNGLE) type = BlockPlanks.EnumType.JUNGLE;
+			else if (matterType == DefaultMatterTypes.WOOD_ACACIA) type = BlockPlanks.EnumType.ACACIA;
+			else if (matterType == DefaultMatterTypes.WOOD_DARK_OAK) type = BlockPlanks.EnumType.DARK_OAK;
 
 			if (type != null)
 			{
-				if (matter.getMatterForm() == DefaultMatterForms.BLOCK) event.setMatterModel(new ModelMatterBlock(Blocks.planks.getDefaultState().withProperty(BlockPlanks.VARIANT, type)));
+				if (matterForm == DefaultMatterForms.BLOCK) event.setMatterModel(new ModelMatterBlock(Blocks.planks.getDefaultState().withProperty(BlockPlanks.VARIANT, type)));
 			}
 		}
 
-		else if (matter.getMatterType() == DefaultMatterTypes.STONE || matter.getMatterType().isVariantOf(DefaultMatterTypes.STONE, true))
+		else if (matterType == DefaultMatterTypes.STONE || matterType.isVariantOf(DefaultMatterTypes.STONE, true))
 		{
 			BlockStone.EnumType type = null;
 
-			if (matter.getMatterType() == DefaultMatterTypes.STONE) type = BlockStone.EnumType.STONE;
-			else if (matter.getMatterType() == DefaultMatterTypes.STONE_GRANITE) type = BlockStone.EnumType.GRANITE;
-			else if (matter.getMatterType() == DefaultMatterTypes.STONE_DIORITE) type = BlockStone.EnumType.DIORITE;
-			else if (matter.getMatterType() == DefaultMatterTypes.STONE_ANDESITE) type = BlockStone.EnumType.ANDESITE;
+			if (matterType == DefaultMatterTypes.STONE) type = BlockStone.EnumType.STONE;
+			else if (matterType == DefaultMatterTypes.STONE_GRANITE) type = BlockStone.EnumType.GRANITE;
+			else if (matterType == DefaultMatterTypes.STONE_DIORITE) type = BlockStone.EnumType.DIORITE;
+			else if (matterType == DefaultMatterTypes.STONE_ANDESITE) type = BlockStone.EnumType.ANDESITE;
 
 			if (type != null)
 			{
-				if (matter.getMatterForm() == DefaultMatterForms.BLOCK) event.setMatterModel(new ModelMatterBlock(Blocks.stone.getDefaultState().withProperty(BlockStone.VARIANT, type)));
+				if (matterForm == DefaultMatterForms.BLOCK) event.setMatterModel(new ModelMatterBlock(Blocks.stone.getDefaultState().withProperty(BlockStone.VARIANT, type)));
 			}
 		}
 
 
-		else if (matter.getMatterType() == DefaultMatterTypes.IRON)
+		else if (matterType == DefaultMatterTypes.IRON)
 		{
-			if (matter.getMatterForm() == DefaultMatterForms.BLOCK) event.setMatterModel(new ModelMatterBlock(Blocks.iron_block.getDefaultState()));
-			else if (matter.getMatterForm() == DefaultMatterForms.INGOT) event.setMatterModel(new ModelMatterIngot(new ResourceLocation(TouchableMatterCraft.SHORT_MODID +":textures/matter/ingot/iron.png")));
+			if (matterForm == DefaultMatterForms.BLOCK) event.setMatterModel(new ModelMatterBlock(Blocks.iron_block.getDefaultState()));
+			else if (matterForm == DefaultMatterForms.INGOT) event.setMatterModel(new ModelMatterIngot(new ResourceLocation(TouchableMatterCraft.SHORT_MODID +":textures/matter/ingot/iron.png")));
 		}
 
-		else if (matter.getMatterType() == DefaultMatterTypes.GOLD)
+		else if (matterType == DefaultMatterTypes.GOLD)
 		{
-			if (matter.getMatterForm() == DefaultMatterForms.BLOCK) event.setMatterModel(new ModelMatterBlock(Blocks.gold_block.getDefaultState()));
-			else if (matter.getMatterForm() == DefaultMatterForms.INGOT) event.setMatterModel(new ModelMatterIngot(new ResourceLocation(TouchableMatterCraft.SHORT_MODID +":textures/matter/ingot/gold.png")));
+			if (matterForm == DefaultMatterForms.BLOCK) event.setMatterModel(new ModelMatterBlock(Blocks.gold_block.getDefaultState()));
+			else if (matterForm == DefaultMatterForms.INGOT) event.setMatterModel(new ModelMatterIngot(new ResourceLocation(TouchableMatterCraft.SHORT_MODID +":textures/matter/ingot/gold.png")));
 		}
 
-		else if (matter.getMatterType() == DefaultMatterTypes.DIAMOND)
+		else if (matterType == DefaultMatterTypes.DIAMOND)
 		{
-			if (matter.getMatterForm() == DefaultMatterForms.BLOCK) event.setMatterModel(new ModelMatterBlock(Blocks.diamond_block.getDefaultState()));
+			if (matterForm == DefaultMatterForms.BLOCK) event.setMatterModel(new ModelMatterBlock(Blocks.diamond_block.getDefaultState()));
 		}
 
 	}

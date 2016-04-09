@@ -1,5 +1,8 @@
 package com.kanomiya.mcmod.touchablecontainercraft.api.matter.property;
 
+
+
+
 /**
  * @author Kanomiya
  *
@@ -7,4 +10,11 @@ package com.kanomiya.mcmod.touchablecontainercraft.api.matter.property;
 public interface IMatterPropertyDispatcher
 {
 	// TODO: getType getForm -> Matter#withProperty getValue
+
+	<T> boolean hasProperty(IMatterProperty<T> property);
+
+	<T> T getValue(IMatterProperty<T> property);
+
+	<T> IMatterPropertyDispatcher withProperty(IMatterProperty<T> property, T value);
+
 }

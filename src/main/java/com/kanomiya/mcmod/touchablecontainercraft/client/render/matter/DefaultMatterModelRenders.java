@@ -8,10 +8,11 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.ResourceLocation;
 
 import com.kanomiya.mcmod.touchablecontainercraft.TouchableMatterCraft;
-import com.kanomiya.mcmod.touchablecontainercraft.api.client.render.IMatterModelRender;
+import com.kanomiya.mcmod.touchablecontainercraft.client.render.IMatterModelRender;
 import com.kanomiya.mcmod.touchablecontainercraft.client.render.ModelBox;
 import com.kanomiya.mcmod.touchablecontainercraft.client.render.ModelIngot;
 import com.kanomiya.mcmod.touchablecontainercraft.entity.EntityMatter;
+import com.kanomiya.mcmod.touchablecontainercraft.matter.property.DefaultMatterProperties;
 
 /**
  * @author Kanomiya
@@ -78,7 +79,7 @@ public class DefaultMatterModelRenders
 
 			modelIngot.render(entity, 0, 0, 0, 0, 0, 1f);
 
-			int amount = entity.getMatter().getAmount();
+			int amount = entity.getMatter().getValue(DefaultMatterProperties.AMOUNT);
 			if (2 <= amount)
 			{
 				GlStateManager.pushMatrix();

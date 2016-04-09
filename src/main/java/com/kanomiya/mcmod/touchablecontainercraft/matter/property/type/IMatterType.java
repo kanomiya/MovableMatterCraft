@@ -1,4 +1,4 @@
-package com.kanomiya.mcmod.touchablecontainercraft.api.matter.type;
+package com.kanomiya.mcmod.touchablecontainercraft.matter.property.type;
 
 import java.util.List;
 

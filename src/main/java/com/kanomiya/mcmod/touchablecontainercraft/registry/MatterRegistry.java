@@ -1,21 +1,23 @@
 package com.kanomiya.mcmod.touchablecontainercraft.registry;
 
-import java.util.function.Supplier;
-
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import com.kanomiya.mcmod.touchablecontainercraft.api.client.render.IMatterModel;
-import com.kanomiya.mcmod.touchablecontainercraft.api.client.render.IMatterModelRender;
-import com.kanomiya.mcmod.touchablecontainercraft.api.matter.form.IMatterForm;
-import com.kanomiya.mcmod.touchablecontainercraft.api.matter.type.IMatterType;
+import com.kanomiya.mcmod.touchablecontainercraft.TouchableMatterCraft;
+import com.kanomiya.mcmod.touchablecontainercraft.api.matter.property.IMatterProperty;
+import com.kanomiya.mcmod.touchablecontainercraft.client.render.IMatterModelRender;
 import com.kanomiya.mcmod.touchablecontainercraft.client.render.matter.DefaultMatterModelRenders;
 import com.kanomiya.mcmod.touchablecontainercraft.client.render.matter.ModelMatterBlock;
-import com.kanomiya.mcmod.touchablecontainercraft.matter.form.DefaultMatterForms;
-import com.kanomiya.mcmod.touchablecontainercraft.matter.type.DefaultMatterTypes;
+import com.kanomiya.mcmod.touchablecontainercraft.client.render.matter.ModelMatterIngot;
+import com.kanomiya.mcmod.touchablecontainercraft.matter.property.DefaultMatterProperties;
+import com.kanomiya.mcmod.touchablecontainercraft.matter.property.form.DefaultMatterForms;
+import com.kanomiya.mcmod.touchablecontainercraft.matter.property.form.IMatterForm;
+import com.kanomiya.mcmod.touchablecontainercraft.matter.property.model.IMatterModel;
+import com.kanomiya.mcmod.touchablecontainercraft.matter.property.type.DefaultMatterTypes;
+import com.kanomiya.mcmod.touchablecontainercraft.matter.property.type.IMatterType;
 
 
 /**
@@ -24,19 +26,27 @@ import com.kanomiya.mcmod.touchablecontainercraft.matter.type.DefaultMatterTypes
  */
 public class MatterRegistry
 {
-	public static final MatterRegistry INSTANCE = new MatterRegistry();
+	public static final BiMap<ResourceLocation, IMatterProperty> propertyRegistry = HashBiMap.create();
 
-	public BiMap<ResourceLocation, IMatterType> typeRegistry = HashBiMap.create();
-	public BiMap<ResourceLocation, IMatterForm> formRegistry = HashBiMap.create();
+	public static final BiMap<ResourceLocation, IMatterType> typeRegistry = HashBiMap.create();
+	public static final BiMap<ResourceLocation, IMatterForm> formRegistry = HashBiMap.create();
 
-	public BiMap<ResourceLocation, Supplier<IMatterModel>> modelRegistry = HashBiMap.create();
+	public static final BiMap<ResourceLocation, Class<? extends IMatterModel>> modelRegistry = HashBiMap.create();
 
 	@SideOnly(Side.CLIENT)
-	public BiMap<ResourceLocation, IMatterModelRender> renderRegistry = HashBiMap.create();
+	public static final BiMap<ResourceLocation, IMatterModelRender> renderRegistry = HashBiMap.create();
 
 	protected MatterRegistry() {  }
 
-	public void registerDefaultTypes()
+	public static void registerDefaultProperties()
+	{
+		propertyRegistry.put(new ResourceLocation(TouchableMatterCraft.MODID, "amount"), DefaultMatterProperties.AMOUNT);
+		propertyRegistry.put(new ResourceLocation(TouchableMatterCraft.MODID, "form"), DefaultMatterProperties.FORM);
+		propertyRegistry.put(new ResourceLocation(TouchableMatterCraft.MODID, "type"), DefaultMatterProperties.TYPE);
+		propertyRegistry.put(new ResourceLocation(TouchableMatterCraft.MODID, "model"), DefaultMatterProperties.MODEL);
+	}
+
+	public static void registerDefaultTypes()
 	{
 		typeRegistry.put(new ResourceLocation("wood"), DefaultMatterTypes.WOOD);
 
@@ -57,19 +67,20 @@ public class MatterRegistry
 		typeRegistry.put(new ResourceLocation("diamond"), DefaultMatterTypes.DIAMOND);
 	}
 
-	public void registerDefaultForms()
+	public static void registerDefaultForms()
 	{
 		formRegistry.put(new ResourceLocation("block"), DefaultMatterForms.BLOCK);
 		formRegistry.put(new ResourceLocation("ingot"), DefaultMatterForms.INGOT);
 	}
 
-	public void registerDefaultModels()
+	public static void registerDefaultModels()
 	{
-		modelRegistry.put(new ResourceLocation("block"), ModelMatterBlock::new);
+		modelRegistry.put(new ResourceLocation("block"), ModelMatterBlock.class);
+		modelRegistry.put(new ResourceLocation("ingot"), ModelMatterIngot.class);
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void registerDefaultRenders()
+	public static void registerDefaultRenders()
 	{
 		renderRegistry.put(new ResourceLocation("block"), DefaultMatterModelRenders.BLOCK);
 		renderRegistry.put(new ResourceLocation("ingot"), DefaultMatterModelRenders.INGOT);
