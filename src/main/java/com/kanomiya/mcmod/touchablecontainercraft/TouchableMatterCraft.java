@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.ModelLoader;
@@ -26,6 +27,8 @@ import org.apache.logging.log4j.Logger;
 
 import com.kanomiya.mcmod.touchablecontainercraft.api.matter.Matter;
 import com.kanomiya.mcmod.touchablecontainercraft.api.matter.event.MatterModelBakeEvent;
+import com.kanomiya.mcmod.touchablecontainercraft.block.BlockMatterCreator;
+import com.kanomiya.mcmod.touchablecontainercraft.block.BlockMatterCutter;
 import com.kanomiya.mcmod.touchablecontainercraft.client.render.matter.ModelMatterBlock;
 import com.kanomiya.mcmod.touchablecontainercraft.client.render.matter.ModelMatterIngot;
 import com.kanomiya.mcmod.touchablecontainercraft.client.render.matter.RenderMatter;
@@ -34,7 +37,9 @@ import com.kanomiya.mcmod.touchablecontainercraft.item.ItemMatter;
 import com.kanomiya.mcmod.touchablecontainercraft.matter.form.DefaultMatterForms;
 import com.kanomiya.mcmod.touchablecontainercraft.matter.type.DefaultMatterTypes;
 import com.kanomiya.mcmod.touchablecontainercraft.network.PacketHandler;
+import com.kanomiya.mcmod.touchablecontainercraft.registry.MatterMappingRegistry;
 import com.kanomiya.mcmod.touchablecontainercraft.registry.MatterRegistry;
+import com.kanomiya.mcmod.touchablecontainercraft.tileentity.TileEntityMatterCutter;
 
 @Mod(modid = TouchableMatterCraft.MODID)
 public class TouchableMatterCraft
@@ -53,6 +58,8 @@ public class TouchableMatterCraft
 	};
 
 	public static ItemMatter itemMatter = new ItemMatter();
+	public static BlockMatterCreator blockMatterCreator = new BlockMatterCreator();
+	public static BlockMatterCutter blockMatterCutter = new BlockMatterCutter();
 
 	public static Logger logger;
 
@@ -63,6 +70,11 @@ public class TouchableMatterCraft
 		logger = event.getModLog();
 
 		GameRegistry.register(itemMatter);
+		GameRegistry.register(blockMatterCreator);
+		GameRegistry.register(new ItemBlock(blockMatterCreator).setRegistryName(blockMatterCreator.getRegistryName()));
+
+		GameRegistry.register(blockMatterCutter);
+		GameRegistry.registerTileEntity(TileEntityMatterCutter.class, TouchableMatterCraft.MODID + ":tileEntityMatterCutter");
 
 		int eId = -1;
 		EntityRegistry.registerModEntity(EntityMatter.class, "entityMatter", ++eId, TouchableMatterCraft.instance, 64, 1, false);
@@ -70,6 +82,9 @@ public class TouchableMatterCraft
 		MatterRegistry.INSTANCE.registerDefaultTypes();
 		MatterRegistry.INSTANCE.registerDefaultForms();
 		MatterRegistry.INSTANCE.registerDefaultModels();
+
+		MatterMappingRegistry.INSTANCE.registerDefaultItemMappings();
+		MatterMappingRegistry.INSTANCE.registerDefaultBlockMappings();
 
 		if (event.getSide().isClient())
 		{
@@ -160,6 +175,7 @@ public class TouchableMatterCraft
 		else if (matter.getMatterType() == DefaultMatterTypes.GOLD)
 		{
 			if (matter.getMatterForm() == DefaultMatterForms.BLOCK) event.setMatterModel(new ModelMatterBlock(Blocks.gold_block.getDefaultState()));
+			else if (matter.getMatterForm() == DefaultMatterForms.INGOT) event.setMatterModel(new ModelMatterIngot(new ResourceLocation(TouchableMatterCraft.SHORT_MODID +":textures/matter/ingot/gold.png")));
 		}
 
 		else if (matter.getMatterType() == DefaultMatterTypes.DIAMOND)

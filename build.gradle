@@ -87,7 +87,6 @@ processResources
 	}
 
 	from 'LICENSE'
-	from 'NOTICE'
 }
 
 task devJar(type: Jar, dependsOn: sourceJar) {

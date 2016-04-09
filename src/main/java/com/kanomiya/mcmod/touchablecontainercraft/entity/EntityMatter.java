@@ -56,6 +56,26 @@ public class EntityMatter extends Entity
 		prevPosZ = posZ;
 	}
 
+	public EntityMatter(World worldIn, double posX, double posY, double posZ, ItemStack matterStack)
+	{
+		this(worldIn, posX, posY, posZ);
+
+		setMatterStack(matterStack);
+	}
+
+	public EntityMatter(World worldIn, double posX, double posY, double posZ, Matter matter)
+	{
+		this(worldIn, posX, posY, posZ);
+
+		ItemStack matterStack = new ItemStack(TouchableMatterCraft.itemMatter, 1, 0);
+		if (matterStack.hasCapability(TouchableMatterCraftAPI.capMatter, null))
+		{
+			matterStack.getCapability(TouchableMatterCraftAPI.capMatter, null).deserializeNBT(matter.serializeNBT());;
+		}
+
+		setMatterStack(matterStack);
+	}
+
 	/**
 	* @inheritDoc
 	*/
@@ -182,7 +202,7 @@ public class EntityMatter extends Entity
 						&& myMatter.getMatterForm() == stackMatter.getMatterForm()
 						&& myMatter.getAmount() +stackMatter.getAmount() <= myMatter.getMatterForm().getMaxAmount())
 				{
-					if (! player.worldObj.isRemote)
+					if (! worldObj.isRemote)
 					{
 						myMatter.setAmount(stackMatter.getAmount() +myMatter.getAmount());
 						stackMatter.setAmount(0);
@@ -194,7 +214,15 @@ public class EntityMatter extends Entity
 					return EnumActionResult.SUCCESS;
 				} else
 				{
-					return EnumActionResult.FAIL;
+					EntityMatter newEntity = new EntityMatter(worldObj, posX, posY +1.0f, posZ, stack);
+
+					if (! worldObj.isRemote)
+					{
+						worldObj.spawnEntityInWorld(newEntity);
+					}
+
+					stack.stackSize = 0;
+					player.setHeldItem(hand, null);
 				}
 			}
 		}
@@ -213,11 +241,10 @@ public class EntityMatter extends Entity
 					newMatter.setAmount(1);
 					newMatter.setMatterTypeAndForm(myMatter.getMatterType(), myMatter.getMatterForm());
 
-					EntityMatter newEntity = new EntityMatter(worldObj, posX, posY +0.7d, posZ);
+					EntityMatter newEntity = new EntityMatter(worldObj, posX, posY +0.7d, posZ, newStack);
 					newEntity.motionX = 0.3d < rand.nextDouble() ? 0.1d : 0d;
 					newEntity.motionY = 0.1d + Math.max(rand.nextDouble() -0.6d, 0d);
 					newEntity.motionZ = 0.3d < rand.nextDouble() ? 0.1d : 0d;
-					newEntity.setMatterStack(newStack);
 
 					if (! worldObj.isRemote)
 					{
