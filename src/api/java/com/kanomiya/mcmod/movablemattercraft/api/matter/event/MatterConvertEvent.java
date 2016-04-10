@@ -26,9 +26,19 @@ public class MatterConvertEvent extends Event
 		return stack;
 	}
 
+	public void setItemStack(ItemStack stack)
+	{
+		this.stack = stack;
+	}
+
 	public IMatter getMatter()
 	{
 		return matter;
+	}
+
+	public void setMatter(IMatter matter)
+	{
+		this.matter = matter;
 	}
 
 
@@ -39,11 +49,6 @@ public class MatterConvertEvent extends Event
 			super(matter, null);
 		}
 
-		public void setItemStack(ItemStack stack)
-		{
-			this.stack = stack;
-		}
-
 	}
 
 	public static class ToMatter extends MatterConvertEvent
@@ -51,11 +56,6 @@ public class MatterConvertEvent extends Event
 		public ToMatter(ItemStack stack)
 		{
 			super(null, stack);
-		}
-
-		public void setMatter(IMatter matter)
-		{
-			this.matter = matter;
 		}
 
 	}

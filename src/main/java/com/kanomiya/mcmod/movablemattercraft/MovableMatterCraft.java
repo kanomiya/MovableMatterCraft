@@ -222,7 +222,11 @@ public class MovableMatterCraft
 				{
 					Block block = Blocks.planks;
 					IBlockState blockState = block.getDefaultState().withProperty(BlockPlanks.VARIANT, type);
-					event.setItemStack(new ItemStack(blockState.getBlock(), amount, block.getMetaFromState(blockState)));
+					ItemStack stack = new ItemStack(blockState.getBlock(), 1, block.getMetaFromState(blockState));
+					stack.stackSize = Math.min(amount, stack.getMaxStackSize());
+					matter.withProperty(DefaultMatterProperties.AMOUNT, amount -stack.stackSize);
+
+					event.setItemStack(stack);
 				}
 			}
 		}
@@ -237,7 +241,11 @@ public class MovableMatterCraft
 				{
 					Block block = Blocks.stone;
 					IBlockState blockState = block.getDefaultState().withProperty(BlockStone.VARIANT, type);
-					event.setItemStack(new ItemStack(blockState.getBlock(), amount, block.getMetaFromState(blockState)));
+					ItemStack stack = new ItemStack(blockState.getBlock(), 1, block.getMetaFromState(blockState));
+					stack.stackSize = Math.min(amount, stack.getMaxStackSize());
+					matter.withProperty(DefaultMatterProperties.AMOUNT, amount -stack.stackSize);
+
+					event.setItemStack(stack);
 				}
 			}
 		}
@@ -245,19 +253,54 @@ public class MovableMatterCraft
 
 		else if (matterType == DefaultMatterTypes.IRON)
 		{
-			if (matterForm == DefaultMatterForms.BLOCK) event.setItemStack(new ItemStack(Blocks.iron_block, amount));
-			else if (matterForm == DefaultMatterForms.INGOT) event.setItemStack(new ItemStack(Items.iron_ingot, amount));
+			if (matterForm == DefaultMatterForms.BLOCK)
+			{
+				ItemStack stack = new ItemStack(Blocks.iron_block, 1);
+				stack.stackSize = Math.min(amount, stack.getMaxStackSize());
+				matter.withProperty(DefaultMatterProperties.AMOUNT, amount -stack.stackSize);
+
+				event.setItemStack(new ItemStack(Blocks.iron_block, amount));
+			}
+			else if (matterForm == DefaultMatterForms.INGOT)
+			{
+				ItemStack stack = new ItemStack(Items.gold_ingot, 1);
+				stack.stackSize = Math.min(amount, stack.getMaxStackSize());
+				matter.withProperty(DefaultMatterProperties.AMOUNT, amount -stack.stackSize);
+
+				event.setItemStack(new ItemStack(Items.iron_ingot, amount));
+			}
 		}
 
 		else if (matterType == DefaultMatterTypes.GOLD)
 		{
-			if (matterForm == DefaultMatterForms.BLOCK) event.setItemStack(new ItemStack(Blocks.gold_block, amount));
-			else if (matterForm == DefaultMatterForms.INGOT) event.setItemStack(new ItemStack(Items.gold_ingot, amount));
+			if (matterForm == DefaultMatterForms.BLOCK)
+			{
+				ItemStack stack = new ItemStack(Blocks.gold_block, 1);
+				stack.stackSize = Math.min(amount, stack.getMaxStackSize());
+				matter.withProperty(DefaultMatterProperties.AMOUNT, amount -stack.stackSize);
+
+				event.setItemStack(new ItemStack(Blocks.gold_block, amount));
+			}
+			else if (matterForm == DefaultMatterForms.INGOT)
+			{
+				ItemStack stack = new ItemStack(Items.gold_ingot, 1);
+				stack.stackSize = Math.min(amount, stack.getMaxStackSize());
+				matter.withProperty(DefaultMatterProperties.AMOUNT, amount -stack.stackSize);
+
+				event.setItemStack(new ItemStack(Items.gold_ingot, amount));
+			}
 		}
 
 		else if (matterType == DefaultMatterTypes.DIAMOND)
 		{
-			if (matterForm == DefaultMatterForms.BLOCK) event.setItemStack(new ItemStack(Blocks.diamond_block, amount));
+			if (matterForm == DefaultMatterForms.BLOCK)
+			{
+				ItemStack stack = new ItemStack(Blocks.diamond_block, 1);
+				stack.stackSize = Math.min(amount, stack.getMaxStackSize());
+				matter.withProperty(DefaultMatterProperties.AMOUNT, amount -stack.stackSize);
+
+				event.setItemStack(new ItemStack(Blocks.diamond_block, amount));
+			}
 		}
 
 
@@ -287,7 +330,9 @@ public class MovableMatterCraft
 
 					if (type != null)
 					{
-						event.setMatter(new Matter().withProperty(DefaultMatterProperties.TYPE, type).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.BLOCK));
+						int actualAmount = Math.min(amount, DefaultMatterForms.BLOCK.getMaxAmount());
+						stack.stackSize -= actualAmount;
+						event.setMatter(new Matter().withProperty(DefaultMatterProperties.TYPE, type).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.BLOCK).withProperty(DefaultMatterProperties.AMOUNT, actualAmount));
 					}
 				}
 			}
@@ -302,32 +347,50 @@ public class MovableMatterCraft
 
 					if (type != null)
 					{
-						event.setMatter(new Matter().withProperty(DefaultMatterProperties.TYPE, type).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.BLOCK));
+						int actualAmount = Math.min(amount, DefaultMatterForms.BLOCK.getMaxAmount());
+						stack.stackSize -= actualAmount;
+						event.setMatter(new Matter().withProperty(DefaultMatterProperties.TYPE, type).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.BLOCK).withProperty(DefaultMatterProperties.AMOUNT, actualAmount));
 					}
 				}
 			}
 
 			else if (item == Item.getItemFromBlock(Blocks.iron_block))
 			{
-				event.setMatter(new Matter().withProperty(DefaultMatterProperties.TYPE, DefaultMatterTypes.IRON).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.BLOCK));
+				int actualAmount = Math.min(amount, DefaultMatterForms.BLOCK.getMaxAmount());
+				stack.stackSize -= actualAmount;
+				event.setMatter(new Matter().withProperty(DefaultMatterProperties.TYPE, DefaultMatterTypes.IRON).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.BLOCK).withProperty(DefaultMatterProperties.AMOUNT, actualAmount));
 			}
 
 			else if (item == Item.getItemFromBlock(Blocks.gold_block))
 			{
-				event.setMatter(new Matter().withProperty(DefaultMatterProperties.TYPE, DefaultMatterTypes.GOLD).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.BLOCK));
+				int actualAmount = Math.min(amount, DefaultMatterForms.BLOCK.getMaxAmount());
+				stack.stackSize -= actualAmount;
+				event.setMatter(new Matter().withProperty(DefaultMatterProperties.TYPE, DefaultMatterTypes.GOLD).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.BLOCK).withProperty(DefaultMatterProperties.AMOUNT, actualAmount));
 			}
 
 			else if (item == Item.getItemFromBlock(Blocks.diamond_block))
 			{
-				event.setMatter(new Matter().withProperty(DefaultMatterProperties.TYPE, DefaultMatterTypes.GOLD).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.BLOCK));
+				int actualAmount = Math.min(amount, DefaultMatterForms.BLOCK.getMaxAmount());
+				stack.stackSize -= actualAmount;
+				event.setMatter(new Matter().withProperty(DefaultMatterProperties.TYPE, DefaultMatterTypes.GOLD).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.BLOCK).withProperty(DefaultMatterProperties.AMOUNT, actualAmount));
 			}
 
 		}
 
 		else
 		{
-			if (item == Items.iron_ingot) event.setMatter(new Matter().withProperty(DefaultMatterProperties.TYPE, DefaultMatterTypes.IRON).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.INGOT));
-			else if (item == Items.gold_ingot) event.setMatter(new Matter().withProperty(DefaultMatterProperties.TYPE, DefaultMatterTypes.GOLD).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.INGOT));
+			if (item == Items.iron_ingot)
+			{
+				int actualAmount = Math.min(amount, DefaultMatterForms.INGOT.getMaxAmount());
+				stack.stackSize -= actualAmount;
+				event.setMatter(new Matter().withProperty(DefaultMatterProperties.TYPE, DefaultMatterTypes.IRON).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.INGOT).withProperty(DefaultMatterProperties.AMOUNT, actualAmount));
+			}
+			else if (item == Items.gold_ingot)
+			{
+				int actualAmount = Math.min(amount, DefaultMatterForms.INGOT.getMaxAmount());
+				stack.stackSize -= actualAmount;
+				event.setMatter(new Matter().withProperty(DefaultMatterProperties.TYPE, DefaultMatterTypes.GOLD).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.INGOT).withProperty(DefaultMatterProperties.AMOUNT, actualAmount));
+			}
 
 		}
 

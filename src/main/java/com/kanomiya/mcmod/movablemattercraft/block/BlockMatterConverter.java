@@ -18,6 +18,7 @@ import com.kanomiya.mcmod.movablemattercraft.api.MovableMatterCraftAPI;
 import com.kanomiya.mcmod.movablemattercraft.api.matter.IMatter;
 import com.kanomiya.mcmod.movablemattercraft.api.matter.event.MatterConvertEvent;
 import com.kanomiya.mcmod.movablemattercraft.entity.EntityMatter;
+import com.kanomiya.mcmod.movablemattercraft.matter.property.DefaultMatterProperties;
 
 /**
  * @author Kanomiya
@@ -47,6 +48,8 @@ public class BlockMatterConverter extends Block
 				MinecraftForge.EVENT_BUS.post(event);
 
 				ItemStack stack = event.getItemStack();
+				if (stack.stackSize <= 0) stack = null;
+				if (matter.getValue(DefaultMatterProperties.AMOUNT) <= 0) playerIn.setHeldItem(hand, null);
 
 				if (stack != null)
 				{
@@ -69,6 +72,9 @@ public class BlockMatterConverter extends Block
 					MinecraftForge.EVENT_BUS.post(event);
 
 					IMatter newMatter = event.getMatter();
+
+					if (heldItem.stackSize <= 0) playerIn.setHeldItem(hand, null);
+					if (newMatter.getValue(DefaultMatterProperties.AMOUNT) <= 0) newMatter = null;
 
 					if (newMatter != null)
 					{
