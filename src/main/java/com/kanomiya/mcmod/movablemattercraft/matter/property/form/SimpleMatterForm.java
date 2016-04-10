@@ -24,7 +24,7 @@ public class SimpleMatterForm implements IMatterForm
 	@Override
 	public String getUnlocalizedName()
 	{
-		return "matter.form." + unlocalizedName + ".name";
+		return unlocalizedName;
 	}
 
 	/**

@@ -27,7 +27,7 @@ public class SimpleMatterType implements IMatterType
 	@Override
 	public String getUnlocalizedName()
 	{
-		return "matter.type." + unlocalizedName + ".name";
+		return unlocalizedName;
 	}
 
 

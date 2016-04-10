@@ -16,7 +16,7 @@ public interface IMatterType
 
 	default String getDisplayName()
 	{
-		return I18n.translateToLocal(getUnlocalizedName());
+		return I18n.translateToLocal("matter.type." + getUnlocalizedName() + ".name");
 	}
 
 	void registerVariant(IMatterType variant);

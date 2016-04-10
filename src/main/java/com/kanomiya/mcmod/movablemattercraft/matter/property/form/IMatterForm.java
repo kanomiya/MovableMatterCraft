@@ -12,7 +12,7 @@ public interface IMatterForm
 
 	default String getDisplayName()
 	{
-		return I18n.translateToLocal(getUnlocalizedName());
+		return I18n.translateToLocal("matter.form." + getUnlocalizedName() + ".name");
 	}
 
 	int getMaxAmount();
