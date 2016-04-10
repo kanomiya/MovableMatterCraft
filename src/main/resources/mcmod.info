@@ -1,7 +1,7 @@
 [
 {
-  "modid": "com.kanomiya.mcmod.touchablemattercraft",
-  "name": "Touchable Matter Craft",
+  "modid": "com.kanomiya.mcmod.movablemattercraft",
+  "name": "Movable Matter Craft",
   "description": "WIP",
   "version": "${version}",
   "mcversion": "${mcversion}",
