@@ -80,6 +80,7 @@ public class MovableMatterCraft
 
 		DefaultMatterTypes.registerDefaultMappings();
 
+		MovableMatterCraftAPIX.initAPIX();
 		MMCInits.initMMC();
 
 		if (event.getSide().isClient())

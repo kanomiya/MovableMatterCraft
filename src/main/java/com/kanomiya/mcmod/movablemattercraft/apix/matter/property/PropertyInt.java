@@ -1,4 +1,4 @@
-package com.kanomiya.mcmod.movablemattercraft.matter.property;
+package com.kanomiya.mcmod.movablemattercraft.apix.matter.property;
 
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagInt;

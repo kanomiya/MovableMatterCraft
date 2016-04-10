@@ -3,8 +3,7 @@ package com.kanomiya.mcmod.movablemattercraft.apix.matter.property;
 import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.form.PropertyMatterForm;
 import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.item.PropertyMatterItemStack;
 import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.model.PropertyMatterModel;
-import com.kanomiya.mcmod.movablemattercraft.matter.property.PropertyInt;
-import com.kanomiya.mcmod.movablemattercraft.matter.property.type.PropertyMatterType;
+import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.type.PropertyMatterType;
 
 /**
  * @author Kanomiya

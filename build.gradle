@@ -21,7 +21,7 @@ plugins {
 	id "net.minecraftforge.gradle.forge" version "2.0.2"
 }
 */
-version = "0.1.0"
+version = "0.1.1"
 group= "com.kanomiya.mcmod.movablemattercraft" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "movablemattercraft"
 sourceCompatibility = 1.8
@@ -37,6 +37,9 @@ minecraft {
 		options.encoding = 'UTF-8'
 		options.compilerArgs += ['-source', '1.8', '-target', '1.8']
 	}
+
+	replaceIn 'package-info.java'
+	replace "@VERSION@", project.version
 }
 
 dependencies {
@@ -56,6 +59,7 @@ processResources {
 		expand 'version':project.version, 'mcversion':project.minecraft.version
 	}
 
+
 	// copy everything else, thats not the mcmod.info
 	from(sourceSets.main.resources.srcDirs) {
 		exclude 'mcmod.info'
@@ -69,21 +73,27 @@ jar {
 }
 
 
-task devJar(type: Jar, dependsOn: jar) {
+task devJar(type: Jar, dependsOn: sourceJar) {
 	appendix = minecraft.version
 	classifier = "dev"
 
-	from 'build/classes/main'
+	from sourceSets.main.output.classesDir
+	from sourceSets.main.output.resourcesDir
 	from 'build/sources/main/java'
-	from 'build/resources/main'
 }
 
-task apiJar(type: Jar, dependsOn: jar) {
+task apiJar(type: Jar, dependsOn: sourceJar) {
 	appendix = minecraft.version
 	classifier = "api"
 
-	from (sourceSets.main.java.srcDirs) {
-		include "com/kanomiya/mcmod/movablemattercraft/api/"
+	ext.apiPackage = "com/kanomiya/mcmod/movablemattercraft/api/"
+
+	from (sourceSets.main.output) {
+		include ext.apiPackage
+	}
+
+	from ('build/sources/main/java') {
+		include ext.apiPackage
 	}
 
 	from 'LICENSE'
@@ -93,10 +103,16 @@ task apixJar(type: Jar, dependsOn: apiJar) {
 	appendix = minecraft.version
 	classifier = "apix"
 
-	from (sourceSets.main.java.srcDirs) {
-		include "com/kanomiya/mcmod/movablemattercraft/apix/"
+	ext.apixPackage = "com/kanomiya/mcmod/movablemattercraft/apix/"
+
+	from (sourceSets.main.output) {
+		include ext.apixPackage
 	}
-	
+
+	from ('build/sources/main/java') {
+		include ext.apixPackage
+	}
+
 	from 'LICENSE'
 }
 

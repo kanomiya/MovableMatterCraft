@@ -1,4 +1,4 @@
-package com.kanomiya.mcmod.movablemattercraft.matter.property.type;
+package com.kanomiya.mcmod.movablemattercraft.apix.matter.property.type;
 
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagString;
@@ -8,7 +8,6 @@ import com.kanomiya.mcmod.movablemattercraft.api.matter.IMatter;
 import com.kanomiya.mcmod.movablemattercraft.api.matter.property.IMatterProperty;
 import com.kanomiya.mcmod.movablemattercraft.apix.MovableMatterCraftAPIX;
 import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.DefaultMatterProperties;
-import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.type.IMatterType;
 
 /**
  * @author Kanomiya

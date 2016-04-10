@@ -1,11 +1,11 @@
 package com.kanomiya.mcmod.movablemattercraft.apix.matter.property.model;
 
-import com.kanomiya.mcmod.movablemattercraft.apix.client.render.IMatterModelRender;
-
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
+
+import com.kanomiya.mcmod.movablemattercraft.apix.client.render.IMatterModelRender;
 
 
 /**

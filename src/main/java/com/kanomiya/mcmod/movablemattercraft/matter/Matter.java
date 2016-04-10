@@ -95,9 +95,12 @@ public class Matter implements IMatter
 			ResourceLocation id = new ResourceLocation(key);
 
 			IMatterProperty property = MovableMatterCraftAPI.propertyRegistry.get(id);
-			Object value = property.deserializeNBT(nbtProperties.getTag(key));
 
-			if (property != null && value != null) withProperty(property, value);
+			if (property != null)
+			{
+				Object value = property.deserializeNBT(nbtProperties.getTag(key));
+				if (value != null) withProperty(property, value);
+			}
 		}
 
 	}
