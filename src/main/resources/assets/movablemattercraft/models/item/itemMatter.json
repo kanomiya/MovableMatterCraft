@@ -1,7 +1,7 @@
 {
 	"parent": "builtin/generated",
 	"textures": {
-		"layer0": "touchablemattercraft:items/itemMatter"
+		"layer0": "movablemattercraft:items/itemMatter"
 	},
 	"display": {
 		"thirdperson": {
