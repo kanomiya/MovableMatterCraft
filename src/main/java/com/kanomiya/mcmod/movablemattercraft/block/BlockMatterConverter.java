@@ -16,7 +16,8 @@ import com.kanomiya.mcmod.movablemattercraft.MovableMatterCraft;
 import com.kanomiya.mcmod.movablemattercraft.api.MovableMatterCraftAPI;
 import com.kanomiya.mcmod.movablemattercraft.api.matter.IMatter;
 import com.kanomiya.mcmod.movablemattercraft.api.matter.event.MatterConvertEvent;
-import com.kanomiya.mcmod.movablemattercraft.matter.property.DefaultMatterProperties;
+import com.kanomiya.mcmod.movablemattercraft.apix.MovableMatterCraftAPIX;
+import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.DefaultMatterProperties;
 
 /**
  * @author Kanomiya
@@ -29,7 +30,7 @@ public class BlockMatterConverter extends Block
 		super(Material.rock);
 
 		setCreativeTab(MovableMatterCraft.tab);
-		setRegistryName(new ResourceLocation(MovableMatterCraft.DOMAIN_NAME, "blockMatterConverter"));
+		setRegistryName(new ResourceLocation(MovableMatterCraftAPIX.DOMAIN_NAME, "blockMatterConverter"));
 		setUnlocalizedName("blockMatterConverter");
 		setHardness(0.5f);
 	}

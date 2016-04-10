@@ -1,15 +1,16 @@
-package com.kanomiya.mcmod.movablemattercraft.client.render;
-
-import com.kanomiya.mcmod.movablemattercraft.matter.property.model.IMatterModel;
+package com.kanomiya.mcmod.movablemattercraft.apix.client.render;
 
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import com.kanomiya.mcmod.movablemattercraft.apix.MovableMatterCraftAPIX;
+import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.model.IMatterModel;
+
 /**
  *
- * Please Register into MatterRegistry
+ * Please Register into {@link MovableMatterCraftAPIX#renderRegistry}
  *
  * @author Kanomiya
  *

@@ -12,7 +12,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -27,11 +26,13 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import org.apache.logging.log4j.Logger;
-
 import com.kanomiya.mcmod.movablemattercraft.api.matter.IMatter;
 import com.kanomiya.mcmod.movablemattercraft.api.matter.event.MatterConvertEvent;
 import com.kanomiya.mcmod.movablemattercraft.api.matter.event.MatterModelBakeEvent;
+import com.kanomiya.mcmod.movablemattercraft.apix.MovableMatterCraftAPIX;
+import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.DefaultMatterProperties;
+import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.form.IMatterForm;
+import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.type.IMatterType;
 import com.kanomiya.mcmod.movablemattercraft.block.BlockMatterConverter;
 import com.kanomiya.mcmod.movablemattercraft.block.BlockMatterCutter;
 import com.kanomiya.mcmod.movablemattercraft.client.render.matter.ModelMatterBlock;
@@ -40,24 +41,17 @@ import com.kanomiya.mcmod.movablemattercraft.client.render.matter.RenderMatter;
 import com.kanomiya.mcmod.movablemattercraft.entity.EntityMatter;
 import com.kanomiya.mcmod.movablemattercraft.item.ItemMatter;
 import com.kanomiya.mcmod.movablemattercraft.matter.Matter;
-import com.kanomiya.mcmod.movablemattercraft.matter.property.DefaultMatterProperties;
 import com.kanomiya.mcmod.movablemattercraft.matter.property.form.DefaultMatterForms;
-import com.kanomiya.mcmod.movablemattercraft.matter.property.form.IMatterForm;
 import com.kanomiya.mcmod.movablemattercraft.matter.property.type.DefaultMatterTypes;
-import com.kanomiya.mcmod.movablemattercraft.matter.property.type.IMatterType;
 import com.kanomiya.mcmod.movablemattercraft.network.PacketHandler;
-import com.kanomiya.mcmod.movablemattercraft.registry.MatterRegistry;
 
-@Mod(modid = MovableMatterCraft.MODID)
+@Mod(modid = MovableMatterCraftAPIX.MODID)
 public class MovableMatterCraft
 {
-	public static final String DOMAIN_NAME = "movablemattercraft";
-	public static final String MODID = "com.kanomiya.mcmod." + MovableMatterCraft.DOMAIN_NAME;
-
-	@Mod.Instance(MODID)
+	@Mod.Instance(MovableMatterCraftAPIX.MODID)
 	public static MovableMatterCraft instance;
 
-	public static CreativeTabs tab = new CreativeTabs(MODID) {
+	public static CreativeTabs tab = new CreativeTabs(MovableMatterCraftAPIX.MODID) {
 		@Override @SideOnly(Side.CLIENT)
 		public Item getTabIconItem() {
 			return MovableMatterCraft.itemMatter;
@@ -68,13 +62,12 @@ public class MovableMatterCraft
 	public static BlockMatterConverter blockMatterConverter = new BlockMatterConverter();
 	public static BlockMatterCutter blockMatterCutter = new BlockMatterCutter();
 
-	public static Logger logger;
 
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event)
 	{
-		logger = event.getModLog();
+		MovableMatterCraftAPIX.logger = event.getModLog();
 
 		GameRegistry.register(itemMatter);
 		GameRegistry.register(blockMatterConverter);
@@ -87,24 +80,16 @@ public class MovableMatterCraft
 
 		DefaultMatterTypes.registerDefaultMappings();
 
-		MatterRegistry.registerDefaultProperties();
-		MatterRegistry.registerDefaultTypes();
-		MatterRegistry.registerDefaultForms();
-		MatterRegistry.registerDefaultModels();
+		MMCInits.initMMC();
 
 		if (event.getSide().isClient())
 		{
 			RenderingRegistry.registerEntityRenderingHandler(EntityMatter.class, RenderMatter::new);
 			// ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMatter.class, new TESRMatter());
 
-			ModelLoader.setCustomModelResourceLocation(MovableMatterCraft.itemMatter, 0, new ModelResourceLocation(MovableMatterCraft.DOMAIN_NAME + ":itemMatter", "inventory"));
-			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(MovableMatterCraft.blockMatterConverter), 0, new ModelResourceLocation(MovableMatterCraft.DOMAIN_NAME + ":blockMatterConverter", "inventory"));
-			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(MovableMatterCraft.blockMatterCutter), 0, new ModelResourceLocation(MovableMatterCraft.DOMAIN_NAME + ":blockMatterCutter", "inventory"));
-
-			ForgeHooksClient.renderTileItem(itemMatter, 0);
-
-			MatterRegistry.registerDefaultRenders();
-
+			ModelLoader.setCustomModelResourceLocation(MovableMatterCraft.itemMatter, 0, new ModelResourceLocation(MovableMatterCraftAPIX.DOMAIN_NAME + ":itemMatter", "inventory"));
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(MovableMatterCraft.blockMatterConverter), 0, new ModelResourceLocation(MovableMatterCraftAPIX.DOMAIN_NAME + ":blockMatterConverter", "inventory"));
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(MovableMatterCraft.blockMatterCutter), 0, new ModelResourceLocation(MovableMatterCraftAPIX.DOMAIN_NAME + ":blockMatterCutter", "inventory"));
 
 		}
 
@@ -132,7 +117,7 @@ public class MovableMatterCraft
 	@SubscribeEvent
 	public void onAttachItemCapabilities(AttachCapabilitiesEvent.Item event)
 	{
-		if (event.getItem() == MovableMatterCraft.itemMatter) event.addCapability(new ResourceLocation(MovableMatterCraft.MODID), new Matter());
+		if (event.getItem() == MovableMatterCraft.itemMatter) event.addCapability(new ResourceLocation(MovableMatterCraftAPIX.MODID), new Matter());
 
 	}
 
@@ -150,7 +135,7 @@ public class MovableMatterCraft
 
 		if (matterForm == DefaultMatterForms.INGOT)
 		{
-			String key = MovableMatterCraft.DOMAIN_NAME + ":textures/matter/ingot/" + matterType.getUnlocalizedName() + ".png";
+			String key = MovableMatterCraftAPIX.DOMAIN_NAME + ":textures/matter/ingot/" + matterType.getUnlocalizedName() + ".png";
 			matter.withProperty(DefaultMatterProperties.MODEL, new ModelMatterIngot(new ResourceLocation(key)));
 
 		}

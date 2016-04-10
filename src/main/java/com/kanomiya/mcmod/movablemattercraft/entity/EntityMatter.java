@@ -24,8 +24,8 @@ import com.google.common.base.Optional;
 import com.kanomiya.mcmod.movablemattercraft.MovableMatterCraft;
 import com.kanomiya.mcmod.movablemattercraft.api.MovableMatterCraftAPI;
 import com.kanomiya.mcmod.movablemattercraft.api.matter.IMatter;
-import com.kanomiya.mcmod.movablemattercraft.matter.property.DefaultMatterProperties;
-import com.kanomiya.mcmod.movablemattercraft.matter.property.form.IMatterForm;
+import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.DefaultMatterProperties;
+import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.form.IMatterForm;
 
 /**
  * @author Kanomiya

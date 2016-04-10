@@ -6,8 +6,9 @@ import net.minecraft.util.ResourceLocation;
 
 import com.kanomiya.mcmod.movablemattercraft.api.matter.IMatter;
 import com.kanomiya.mcmod.movablemattercraft.api.matter.property.IMatterProperty;
-import com.kanomiya.mcmod.movablemattercraft.matter.property.DefaultMatterProperties;
-import com.kanomiya.mcmod.movablemattercraft.registry.MatterRegistry;
+import com.kanomiya.mcmod.movablemattercraft.apix.MovableMatterCraftAPIX;
+import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.DefaultMatterProperties;
+import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.type.IMatterType;
 
 /**
  * @author Kanomiya
@@ -27,7 +28,7 @@ public class PropertyMatterType implements IMatterProperty<IMatterType>
 	@Override
 	public NBTTagString serializeNBT(IMatterType value)
 	{
-		ResourceLocation id = MatterRegistry.typeRegistry.inverse().get(value);
+		ResourceLocation id = MovableMatterCraftAPIX.typeRegistry.inverse().get(value);
 		return new NBTTagString(id == null ? "null" : id.toString());
 	}
 
@@ -37,7 +38,7 @@ public class PropertyMatterType implements IMatterProperty<IMatterType>
 	@Override
 	public IMatterType deserializeNBT(NBTBase nbt)
 	{
-		if (nbt instanceof NBTTagString) return MatterRegistry.typeRegistry.get(new ResourceLocation(((NBTTagString) nbt).getString()));
+		if (nbt instanceof NBTTagString) return MovableMatterCraftAPIX.typeRegistry.get(new ResourceLocation(((NBTTagString) nbt).getString()));
 		return null;
 	}
 }

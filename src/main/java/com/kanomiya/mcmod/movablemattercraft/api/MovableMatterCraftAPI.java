@@ -1,11 +1,15 @@
 package com.kanomiya.mcmod.movablemattercraft.api;
 
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import com.kanomiya.mcmod.movablemattercraft.api.matter.IMatter;
+import com.kanomiya.mcmod.movablemattercraft.api.matter.property.IMatterProperty;
 
 /**
  * @author Kanomiya
@@ -15,6 +19,8 @@ public class MovableMatterCraftAPI
 {
 	@CapabilityInject(IMatter.class)
 	public static final Capability<IMatter> capMatter = null;
+
+	public static final BiMap<ResourceLocation, IMatterProperty> propertyRegistry = HashBiMap.create();
 
 	/**
 	 * ICapabilityProviderがIMatterのインスタンスを持つかどうか判定する<br>

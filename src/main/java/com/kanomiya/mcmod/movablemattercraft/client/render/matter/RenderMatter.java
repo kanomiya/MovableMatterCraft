@@ -6,9 +6,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.DefaultMatterProperties;
+import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.model.IMatterModel;
 import com.kanomiya.mcmod.movablemattercraft.entity.EntityMatter;
-import com.kanomiya.mcmod.movablemattercraft.matter.property.DefaultMatterProperties;
-import com.kanomiya.mcmod.movablemattercraft.matter.property.model.IMatterModel;
 
 @SideOnly(Side.CLIENT)
 public class RenderMatter extends Render<EntityMatter>

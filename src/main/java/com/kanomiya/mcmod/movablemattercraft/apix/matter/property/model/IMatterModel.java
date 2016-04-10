@@ -1,6 +1,6 @@
-package com.kanomiya.mcmod.movablemattercraft.matter.property.model;
+package com.kanomiya.mcmod.movablemattercraft.apix.matter.property.model;
 
-import com.kanomiya.mcmod.movablemattercraft.client.render.IMatterModelRender;
+import com.kanomiya.mcmod.movablemattercraft.apix.client.render.IMatterModelRender;
 
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.Entity;

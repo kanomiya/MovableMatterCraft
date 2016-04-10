@@ -66,8 +66,6 @@ processResources {
 
 jar {
 	appendix = minecraft.version
-
-	from sourceSets.api.output
 }
 
 
@@ -78,22 +76,32 @@ task devJar(type: Jar, dependsOn: jar) {
 	from 'build/classes/main'
 	from 'build/sources/main/java'
 	from 'build/resources/main'
-
-	from 'build/classes/api'
-	from 'build/sources/api/java'
-	from 'build/resources/api'
 }
 
 task apiJar(type: Jar, dependsOn: jar) {
 	appendix = minecraft.version
 	classifier = "api"
 
-	from sourceSets.api.output
+	from (sourceSets.main.java.srcDirs) {
+		include "com/kanomiya/mcmod/movablemattercraft/api/"
+	}
+
+	from 'LICENSE'
+}
+
+task apixJar(type: Jar, dependsOn: apiJar) {
+	appendix = minecraft.version
+	classifier = "apix"
+
+	from (sourceSets.main.java.srcDirs) {
+		include "com/kanomiya/mcmod/movablemattercraft/apix/"
+	}
+	
 	from 'LICENSE'
 }
 
 artifacts {
-	archives devJar, apiJar
+	archives devJar, apiJar, apixJar
 }
 
 sourceJar.appendix = minecraft.version

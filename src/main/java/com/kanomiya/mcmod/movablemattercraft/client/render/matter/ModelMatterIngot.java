@@ -3,9 +3,9 @@ package com.kanomiya.mcmod.movablemattercraft.client.render.matter;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
-import com.kanomiya.mcmod.movablemattercraft.client.render.IMatterModelRender;
+import com.kanomiya.mcmod.movablemattercraft.apix.client.render.IMatterModelRender;
+import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.model.IMatterModel;
 import com.kanomiya.mcmod.movablemattercraft.entity.EntityMatter;
-import com.kanomiya.mcmod.movablemattercraft.matter.property.model.IMatterModel;
 
 /**
  * @author Kanomiya

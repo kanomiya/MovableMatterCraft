@@ -20,6 +20,7 @@ import com.kanomiya.mcmod.movablemattercraft.api.MovableMatterCraftAPI;
 import com.kanomiya.mcmod.movablemattercraft.api.matter.IMatter;
 import com.kanomiya.mcmod.movablemattercraft.api.matter.action.IMatterAction;
 import com.kanomiya.mcmod.movablemattercraft.api.matter.event.MatterActionEvent;
+import com.kanomiya.mcmod.movablemattercraft.apix.MovableMatterCraftAPIX;
 import com.kanomiya.mcmod.movablemattercraft.entity.EntityMatter;
 import com.kanomiya.mcmod.movablemattercraft.matter.action.DefaultMatterActions;
 
@@ -34,7 +35,7 @@ public class BlockMatterCutter extends Block
 		super(Material.rock);
 
 		setCreativeTab(MovableMatterCraft.tab);
-		setRegistryName(new ResourceLocation(MovableMatterCraft.DOMAIN_NAME, "blockMatterCutter"));
+		setRegistryName(new ResourceLocation(MovableMatterCraftAPIX.DOMAIN_NAME, "blockMatterCutter"));
 		setUnlocalizedName("blockMatterCutter");
 		setHardness(0.5f);
 	}

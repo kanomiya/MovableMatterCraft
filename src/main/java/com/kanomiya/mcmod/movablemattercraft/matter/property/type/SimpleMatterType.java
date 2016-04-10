@@ -3,6 +3,7 @@ package com.kanomiya.mcmod.movablemattercraft.matter.property.type;
 import java.util.List;
 
 import com.google.common.collect.Lists;
+import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.type.IMatterType;
 
 
 

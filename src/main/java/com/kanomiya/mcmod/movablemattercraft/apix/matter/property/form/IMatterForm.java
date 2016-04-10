@@ -1,4 +1,4 @@
-package com.kanomiya.mcmod.movablemattercraft.matter.property.form;
+package com.kanomiya.mcmod.movablemattercraft.apix.matter.property.form;
 
 import net.minecraft.util.text.translation.I18n;
 

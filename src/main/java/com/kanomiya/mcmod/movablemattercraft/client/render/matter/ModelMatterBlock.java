@@ -5,9 +5,9 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 
-import com.kanomiya.mcmod.movablemattercraft.client.render.IMatterModelRender;
+import com.kanomiya.mcmod.movablemattercraft.apix.client.render.IMatterModelRender;
+import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.model.IMatterModel;
 import com.kanomiya.mcmod.movablemattercraft.entity.EntityMatter;
-import com.kanomiya.mcmod.movablemattercraft.matter.property.model.IMatterModel;
 
 /**
  * @author Kanomiya

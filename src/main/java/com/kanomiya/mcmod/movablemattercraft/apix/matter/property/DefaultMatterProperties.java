@@ -1,8 +1,9 @@
-package com.kanomiya.mcmod.movablemattercraft.matter.property;
+package com.kanomiya.mcmod.movablemattercraft.apix.matter.property;
 
-import com.kanomiya.mcmod.movablemattercraft.matter.property.form.PropertyMatterForm;
-import com.kanomiya.mcmod.movablemattercraft.matter.property.item.PropertyMatterItemStack;
-import com.kanomiya.mcmod.movablemattercraft.matter.property.model.PropertyMatterModel;
+import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.form.PropertyMatterForm;
+import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.item.PropertyMatterItemStack;
+import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.model.PropertyMatterModel;
+import com.kanomiya.mcmod.movablemattercraft.matter.property.PropertyInt;
 import com.kanomiya.mcmod.movablemattercraft.matter.property.type.PropertyMatterType;
 
 /**

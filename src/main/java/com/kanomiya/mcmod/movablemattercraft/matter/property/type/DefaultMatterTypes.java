@@ -5,6 +5,7 @@ import net.minecraft.block.BlockStone;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.type.IMatterType;
 
 
 /**

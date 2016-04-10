@@ -7,10 +7,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
 import com.google.common.collect.Maps;
+import com.kanomiya.mcmod.movablemattercraft.api.MovableMatterCraftAPI;
 import com.kanomiya.mcmod.movablemattercraft.api.matter.IMatter;
 import com.kanomiya.mcmod.movablemattercraft.api.matter.property.IMatterProperty;
-import com.kanomiya.mcmod.movablemattercraft.matter.property.DefaultMatterProperties;
-import com.kanomiya.mcmod.movablemattercraft.registry.MatterRegistry;
+import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.DefaultMatterProperties;
 
 /**
  * @author Kanomiya
@@ -73,7 +73,7 @@ public class Matter implements IMatter
 
 		for (IMatterProperty property: properties.keySet())
 		{
-			ResourceLocation id = MatterRegistry.propertyRegistry.inverse().get(property);
+			ResourceLocation id = MovableMatterCraftAPI.propertyRegistry.inverse().get(property);
 			nbtProperties.setTag(id == null ? "null" : id.toString(), property.serializeNBT(properties.get(property)));
 		}
 
@@ -94,7 +94,7 @@ public class Matter implements IMatter
 		{
 			ResourceLocation id = new ResourceLocation(key);
 
-			IMatterProperty property = MatterRegistry.propertyRegistry.get(id);
+			IMatterProperty property = MovableMatterCraftAPI.propertyRegistry.get(id);
 			Object value = property.deserializeNBT(nbtProperties.getTag(key));
 
 			if (property != null && value != null) withProperty(property, value);

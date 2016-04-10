@@ -1,4 +1,4 @@
-package com.kanomiya.mcmod.movablemattercraft.matter.property.type;
+package com.kanomiya.mcmod.movablemattercraft.apix.matter.property.type;
 
 import java.util.List;
 

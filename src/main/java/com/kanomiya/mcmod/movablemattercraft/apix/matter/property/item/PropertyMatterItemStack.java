@@ -1,4 +1,4 @@
-package com.kanomiya.mcmod.movablemattercraft.matter.property.item;
+package com.kanomiya.mcmod.movablemattercraft.apix.matter.property.item;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;

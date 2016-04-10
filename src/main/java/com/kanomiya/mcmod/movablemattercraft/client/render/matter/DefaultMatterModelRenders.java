@@ -6,31 +6,38 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.kanomiya.mcmod.movablemattercraft.MovableMatterCraft;
-import com.kanomiya.mcmod.movablemattercraft.client.render.IMatterModelRender;
+import com.kanomiya.mcmod.movablemattercraft.apix.MovableMatterCraftAPIX;
+import com.kanomiya.mcmod.movablemattercraft.apix.client.render.IMatterModelRender;
+import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.DefaultMatterProperties;
 import com.kanomiya.mcmod.movablemattercraft.client.render.ModelBox;
 import com.kanomiya.mcmod.movablemattercraft.client.render.ModelIngot;
 import com.kanomiya.mcmod.movablemattercraft.entity.EntityMatter;
-import com.kanomiya.mcmod.movablemattercraft.matter.property.DefaultMatterProperties;
 
 /**
  * @author Kanomiya
  *
  */
+@SideOnly(Side.CLIENT)
 public class DefaultMatterModelRenders
 {
+	@SideOnly(Side.CLIENT)
 	public static class ResourceLocations
 	{
-		public static final ResourceLocation resourceBox = new ResourceLocation(MovableMatterCraft.DOMAIN_NAME, "textures/matter/modelBox.png");
+		public static final ResourceLocation resourceBox = new ResourceLocation(MovableMatterCraftAPIX.DOMAIN_NAME, "textures/matter/modelBox.png");
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static class Models
 	{
 		public static final ModelBox modelBox = new ModelBox();
+		public static final ModelIngot modelIngot = new ModelIngot();
 	}
 
 
+	@SideOnly(Side.CLIENT)
 	public static final IMatterModelRender BLOCK = new IMatterModelRender<EntityMatter, ModelMatterBlock>()
 	{
 		@Override
@@ -58,10 +65,9 @@ public class DefaultMatterModelRenders
 	};
 
 
+	@SideOnly(Side.CLIENT)
 	public static final IMatterModelRender INGOT = new IMatterModelRender<EntityMatter, ModelMatterIngot>()
 	{
-		protected final ModelIngot modelIngot = new ModelIngot();
-
 		@Override
 		public void doRender(TextureManager renderEngine, EntityMatter entity, ModelMatterIngot model, double x, double y, double z, float entityYaw, float partialTicks)
 		{
@@ -78,7 +84,7 @@ public class DefaultMatterModelRenders
 
 			renderEngine.bindTexture(model.getTexture());
 
-			modelIngot.render(entity, 0, 0, 0, 0, 0, 1f);
+			Models.modelIngot.render(entity, 0, 0, 0, 0, 0, 1f);
 
 			int amount = entity.getMatter().getValue(DefaultMatterProperties.AMOUNT);
 			if (2 <= amount)
@@ -86,12 +92,12 @@ public class DefaultMatterModelRenders
 				GlStateManager.pushMatrix();
 
 				GlStateManager.translate(0d, 0d, 4d);
-				modelIngot.render(entity, 0, 0, 0, 0, 0, 1f);
+				Models.modelIngot.render(entity, 0, 0, 0, 0, 0, 1f);
 
 				if (3 <= amount)
 				{
 					GlStateManager.translate(0d, 0d, 4d);
-					modelIngot.render(entity, 0, 0, 0, 0, 0, 1f);
+					Models.modelIngot.render(entity, 0, 0, 0, 0, 0, 1f);
 				}
 
 				GlStateManager.popMatrix();
@@ -102,13 +108,13 @@ public class DefaultMatterModelRenders
 					double oz1 = (amount < 7) ? 0d : 2d;
 
 					GlStateManager.translate(0d, 3d, oz1 +2d);
-					modelIngot.render(entity, 0, 0, 0, 0, 0, 1f);
+					Models.modelIngot.render(entity, 0, 0, 0, 0, 0, 1f);
 
 
 					if (5 <= amount)
 					{
 						GlStateManager.translate(0d, 0d, 4d);
-						modelIngot.render(entity, 0, 0, 0, 0, 0, 1f);
+						Models.modelIngot.render(entity, 0, 0, 0, 0, 0, 1f);
 					}
 				}
 				GlStateManager.popMatrix();
@@ -120,25 +126,25 @@ public class DefaultMatterModelRenders
 					double oz1 = (amount < 7) ? 0d : -4d;
 
 					GlStateManager.translate(0d, oy1 +6d, oz1 +4d);
-					modelIngot.render(entity, 0, 0, 0, 0, 0, 1f);
+					Models.modelIngot.render(entity, 0, 0, 0, 0, 0, 1f);
 				}
 				GlStateManager.popMatrix();
 
 				if (7 <= amount)
 				{
 					GlStateManager.translate(0d, 6d, 6d);
-					modelIngot.render(entity, 0, 0, 0, 0, 0, 1f);
+					Models.modelIngot.render(entity, 0, 0, 0, 0, 0, 1f);
 
 					if (8 <= amount)
 					{
 						GlStateManager.translate(0d, 0d, -4d);
-						modelIngot.render(entity, 0, 0, 0, 0, 0, 1f);
+						Models.modelIngot.render(entity, 0, 0, 0, 0, 0, 1f);
 
 
 						if (9 <= amount)
 						{
 							GlStateManager.translate(0d, 3d, 2d);
-							modelIngot.render(entity, 0, 0, 0, 0, 0, 1f);
+							Models.modelIngot.render(entity, 0, 0, 0, 0, 0, 1f);
 						}
 					}
 				}

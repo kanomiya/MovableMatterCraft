@@ -23,11 +23,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import com.kanomiya.mcmod.movablemattercraft.MovableMatterCraft;
 import com.kanomiya.mcmod.movablemattercraft.api.MovableMatterCraftAPI;
 import com.kanomiya.mcmod.movablemattercraft.api.matter.IMatter;
+import com.kanomiya.mcmod.movablemattercraft.apix.MovableMatterCraftAPIX;
+import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.DefaultMatterProperties;
+import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.form.IMatterForm;
+import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.type.IMatterType;
 import com.kanomiya.mcmod.movablemattercraft.entity.EntityMatter;
-import com.kanomiya.mcmod.movablemattercraft.matter.property.DefaultMatterProperties;
-import com.kanomiya.mcmod.movablemattercraft.matter.property.form.IMatterForm;
-import com.kanomiya.mcmod.movablemattercraft.matter.property.type.IMatterType;
-import com.kanomiya.mcmod.movablemattercraft.registry.MatterRegistry;
 
 /**
  * @author Kanomiya
@@ -38,7 +38,7 @@ public class ItemMatter extends Item
 
 	public ItemMatter()
 	{
-		setRegistryName(new ResourceLocation(MovableMatterCraft.DOMAIN_NAME, "itemMagicMatter"));
+		setRegistryName(new ResourceLocation(MovableMatterCraftAPIX.DOMAIN_NAME, "itemMagicMatter"));
 		setUnlocalizedName("itemMatter");
 
 		setCreativeTab(MovableMatterCraft.tab);
@@ -51,9 +51,9 @@ public class ItemMatter extends Item
 	public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems)
 	{
 
-		for (IMatterType type: MatterRegistry.typeRegistry.values())
+		for (IMatterType type: MovableMatterCraftAPIX.typeRegistry.values())
 		{
-			for (IMatterForm form: MatterRegistry.formRegistry.values())
+			for (IMatterForm form: MovableMatterCraftAPIX.formRegistry.values())
 			{
 				ItemStack stack = new ItemStack(this, 1, 0);
 

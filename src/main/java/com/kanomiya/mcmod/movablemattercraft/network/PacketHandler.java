@@ -3,7 +3,7 @@ package com.kanomiya.mcmod.movablemattercraft.network;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 
-import com.kanomiya.mcmod.movablemattercraft.MovableMatterCraft;
+import com.kanomiya.mcmod.movablemattercraft.apix.MovableMatterCraftAPIX;
 
 /**
  * @author Kanomiya
@@ -11,7 +11,7 @@ import com.kanomiya.mcmod.movablemattercraft.MovableMatterCraft;
  */
 public class PacketHandler
 {
-	public static final SimpleNetworkWrapper INSTANCE = new SimpleNetworkWrapper(MovableMatterCraft.MODID);
+	public static final SimpleNetworkWrapper INSTANCE = new SimpleNetworkWrapper(MovableMatterCraftAPIX.MODID);
 
 	public static void init()
 	{

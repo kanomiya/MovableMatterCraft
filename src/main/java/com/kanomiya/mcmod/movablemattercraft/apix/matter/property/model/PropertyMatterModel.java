@@ -1,15 +1,14 @@
-package com.kanomiya.mcmod.movablemattercraft.matter.property.model;
+package com.kanomiya.mcmod.movablemattercraft.apix.matter.property.model;
 
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 
-import com.kanomiya.mcmod.movablemattercraft.MovableMatterCraft;
 import com.kanomiya.mcmod.movablemattercraft.api.matter.IMatter;
 import com.kanomiya.mcmod.movablemattercraft.api.matter.event.MatterModelBakeEvent;
 import com.kanomiya.mcmod.movablemattercraft.api.matter.property.IMatterProperty;
-import com.kanomiya.mcmod.movablemattercraft.registry.MatterRegistry;
+import com.kanomiya.mcmod.movablemattercraft.apix.MovableMatterCraftAPIX;
 
 /**
  * @author Kanomiya
@@ -31,7 +30,7 @@ public class PropertyMatterModel implements IMatterProperty<IMatterModel>
 	public NBTTagCompound serializeNBT(IMatterModel value)
 	{
 		NBTTagCompound nbt = new NBTTagCompound();
-		ResourceLocation id = MatterRegistry.modelRegistry.inverse().get(value);
+		ResourceLocation id = MovableMatterCraftAPIX.modelRegistry.inverse().get(value);
 
 		nbt.setString("id", id == null ? "null" : id.toString());
 		nbt.setTag("args", value.serializeNBT());
@@ -49,7 +48,7 @@ public class PropertyMatterModel implements IMatterProperty<IMatterModel>
 		{
 			NBTTagCompound compound = (NBTTagCompound) nbt;
 
-			Class<? extends IMatterModel> clazz = MatterRegistry.modelRegistry.get(new ResourceLocation(compound.getString("id")));
+			Class<? extends IMatterModel> clazz = MovableMatterCraftAPIX.modelRegistry.get(new ResourceLocation(compound.getString("id")));
 			if (clazz != null)
 			{
 				try
@@ -60,7 +59,7 @@ public class PropertyMatterModel implements IMatterProperty<IMatterModel>
 					return value;
 				} catch (InstantiationException | IllegalAccessException e)
 				{
-					MovableMatterCraft.logger.error(e.getLocalizedMessage());
+					MovableMatterCraftAPIX.logger.error(e.getLocalizedMessage());
 					e.printStackTrace();
 				}
 			}
