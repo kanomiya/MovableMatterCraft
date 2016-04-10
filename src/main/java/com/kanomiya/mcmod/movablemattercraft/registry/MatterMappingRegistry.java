@@ -81,7 +81,7 @@ public class MatterMappingRegistry
 		return null;
 	}
 
-	public void registerDefaultItemMappings() // TODO 認識部分、Creator
+	public void registerDefaultItemMappings()
 	{
 		itemRegistry.put(new ItemStack(Items.iron_ingot, 1, 0), () -> new Matter().withProperty(DefaultMatterProperties.TYPE, DefaultMatterTypes.IRON).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.INGOT));
 		itemRegistry.put(new ItemStack(Items.gold_ingot, 1, 0), () -> new Matter().withProperty(DefaultMatterProperties.TYPE, DefaultMatterTypes.GOLD).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.INGOT));

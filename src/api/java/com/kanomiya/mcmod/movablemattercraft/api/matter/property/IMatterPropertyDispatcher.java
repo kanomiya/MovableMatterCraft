@@ -9,8 +9,6 @@ package com.kanomiya.mcmod.movablemattercraft.api.matter.property;
  */
 public interface IMatterPropertyDispatcher
 {
-	// TODO: getType getForm -> Matter#withProperty getValue
-
 	<T> boolean hasProperty(IMatterProperty<T> property);
 
 	<T> T getValue(IMatterProperty<T> property);
