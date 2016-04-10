@@ -53,7 +53,7 @@ public class Matter implements IMatter
 		String type = !hasProperty(DefaultMatterProperties.TYPE) ? "null" : getValue(DefaultMatterProperties.TYPE).getDisplayName();
 		String form = !hasProperty(DefaultMatterProperties.FORM) ? "null" : getValue(DefaultMatterProperties.FORM).getDisplayName();
 
-		return type + " <" + form + ">" + (!hasProperty(DefaultMatterProperties.AMOUNT) ? "x" +getValue(DefaultMatterProperties.AMOUNT) : "");
+		return type + " <" + form + ">" + (!hasProperty(DefaultMatterProperties.AMOUNT) ? "" : " x" + getValue(DefaultMatterProperties.AMOUNT));
 	}
 
 	@Override

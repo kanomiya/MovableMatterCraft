@@ -7,8 +7,8 @@ import net.minecraftforge.common.MinecraftForge;
 
 import com.kanomiya.mcmod.movablemattercraft.MovableMatterCraft;
 import com.kanomiya.mcmod.movablemattercraft.api.matter.IMatter;
+import com.kanomiya.mcmod.movablemattercraft.api.matter.event.MatterModelBakeEvent;
 import com.kanomiya.mcmod.movablemattercraft.api.matter.property.IMatterProperty;
-import com.kanomiya.mcmod.movablemattercraft.matter.event.MatterModelBakeEvent;
 import com.kanomiya.mcmod.movablemattercraft.registry.MatterRegistry;
 
 /**
@@ -22,8 +22,6 @@ public class PropertyMatterModel implements IMatterProperty<IMatterModel>
 	{
 		MatterModelBakeEvent event = new MatterModelBakeEvent(matter);
 		MinecraftForge.EVENT_BUS.post(event);
-
-		matter.withProperty(this, event.getMatterModel());
 	}
 
 	/**

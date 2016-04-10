@@ -1,5 +1,11 @@
 package com.kanomiya.mcmod.movablemattercraft.matter.property.type;
 
+import net.minecraft.block.BlockPlanks;
+import net.minecraft.block.BlockStone;
+
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+
 
 /**
  * @author Kanomiya
@@ -23,5 +29,26 @@ public class DefaultMatterTypes
 	public static final IMatterType IRON = new SimpleMatterType("iron");
 	public static final IMatterType GOLD = new SimpleMatterType("gold");
 	public static final IMatterType DIAMOND = new SimpleMatterType("diamond");
+
+
+	public static final BiMap<BlockPlanks.EnumType, IMatterType> WOOD_MAPPINGS = HashBiMap.create();
+	public static final BiMap<BlockStone.EnumType, IMatterType> STONE_MAPPINGS = HashBiMap.create();
+
+	public static void registerDefaultMappings()
+	{
+		WOOD_MAPPINGS.put(BlockPlanks.EnumType.OAK, WOOD_OAK);
+		WOOD_MAPPINGS.put(BlockPlanks.EnumType.SPRUCE, WOOD_SPRUCE);
+		WOOD_MAPPINGS.put(BlockPlanks.EnumType.BIRCH, WOOD_BIRCH);
+		WOOD_MAPPINGS.put(BlockPlanks.EnumType.JUNGLE, WOOD_JUNGLE);
+		WOOD_MAPPINGS.put(BlockPlanks.EnumType.ACACIA, WOOD_ACACIA);
+		WOOD_MAPPINGS.put(BlockPlanks.EnumType.DARK_OAK, WOOD_DARK_OAK);
+
+		STONE_MAPPINGS.put(BlockStone.EnumType.STONE, STONE);
+		STONE_MAPPINGS.put(BlockStone.EnumType.GRANITE, STONE_GRANITE);
+		STONE_MAPPINGS.put(BlockStone.EnumType.DIORITE, STONE_DIORITE);
+		STONE_MAPPINGS.put(BlockStone.EnumType.ANDESITE, STONE_ANDESITE);
+
+	}
+
 
 }

@@ -1,12 +1,16 @@
 package com.kanomiya.mcmod.movablemattercraft;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockStone;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.ModelLoader;
@@ -26,7 +30,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Logger;
 
 import com.kanomiya.mcmod.movablemattercraft.api.matter.IMatter;
-import com.kanomiya.mcmod.movablemattercraft.block.BlockMatterCreator;
+import com.kanomiya.mcmod.movablemattercraft.api.matter.event.MatterConvertEvent;
+import com.kanomiya.mcmod.movablemattercraft.api.matter.event.MatterModelBakeEvent;
+import com.kanomiya.mcmod.movablemattercraft.block.BlockMatterConverter;
 import com.kanomiya.mcmod.movablemattercraft.block.BlockMatterCutter;
 import com.kanomiya.mcmod.movablemattercraft.client.render.matter.ModelMatterBlock;
 import com.kanomiya.mcmod.movablemattercraft.client.render.matter.ModelMatterIngot;
@@ -34,14 +40,12 @@ import com.kanomiya.mcmod.movablemattercraft.client.render.matter.RenderMatter;
 import com.kanomiya.mcmod.movablemattercraft.entity.EntityMatter;
 import com.kanomiya.mcmod.movablemattercraft.item.ItemMatter;
 import com.kanomiya.mcmod.movablemattercraft.matter.Matter;
-import com.kanomiya.mcmod.movablemattercraft.matter.event.MatterModelBakeEvent;
 import com.kanomiya.mcmod.movablemattercraft.matter.property.DefaultMatterProperties;
 import com.kanomiya.mcmod.movablemattercraft.matter.property.form.DefaultMatterForms;
 import com.kanomiya.mcmod.movablemattercraft.matter.property.form.IMatterForm;
 import com.kanomiya.mcmod.movablemattercraft.matter.property.type.DefaultMatterTypes;
 import com.kanomiya.mcmod.movablemattercraft.matter.property.type.IMatterType;
 import com.kanomiya.mcmod.movablemattercraft.network.PacketHandler;
-import com.kanomiya.mcmod.movablemattercraft.registry.MatterMappingRegistry;
 import com.kanomiya.mcmod.movablemattercraft.registry.MatterRegistry;
 import com.kanomiya.mcmod.movablemattercraft.tileentity.TileEntityMatterCutter;
 
@@ -62,7 +66,7 @@ public class MovableMatterCraft
 	};
 
 	public static ItemMatter itemMatter = new ItemMatter();
-	public static BlockMatterCreator blockMatterCreator = new BlockMatterCreator();
+	public static BlockMatterConverter blockMatterConverter = new BlockMatterConverter();
 	public static BlockMatterCutter blockMatterCutter = new BlockMatterCutter();
 
 	public static Logger logger;
@@ -74,8 +78,8 @@ public class MovableMatterCraft
 		logger = event.getModLog();
 
 		GameRegistry.register(itemMatter);
-		GameRegistry.register(blockMatterCreator);
-		GameRegistry.register(new ItemBlock(blockMatterCreator).setRegistryName(blockMatterCreator.getRegistryName()));
+		GameRegistry.register(blockMatterConverter);
+		GameRegistry.register(new ItemBlock(blockMatterConverter).setRegistryName(blockMatterConverter.getRegistryName()));
 		GameRegistry.register(blockMatterCutter);
 		GameRegistry.register(new ItemBlock(blockMatterCutter).setRegistryName(blockMatterCutter.getRegistryName()));
 
@@ -84,13 +88,12 @@ public class MovableMatterCraft
 		int eId = -1;
 		EntityRegistry.registerModEntity(EntityMatter.class, "entityMatter", ++eId, MovableMatterCraft.instance, 64, 1, false);
 
+		DefaultMatterTypes.registerDefaultMappings();
+
 		MatterRegistry.registerDefaultProperties();
 		MatterRegistry.registerDefaultTypes();
 		MatterRegistry.registerDefaultForms();
 		MatterRegistry.registerDefaultModels();
-
-		MatterMappingRegistry.INSTANCE.registerDefaultItemMappings();
-		MatterMappingRegistry.INSTANCE.registerDefaultBlockMappings();
 
 		if (event.getSide().isClient())
 		{
@@ -137,10 +140,13 @@ public class MovableMatterCraft
 	public void onMatterModelBake(MatterModelBakeEvent event)
 	{
 		IMatter matter = event.getMatter();
-		event.setMatterModel(new ModelMatterBlock(Blocks.fire.getDefaultState()));
+		matter.withProperty(DefaultMatterProperties.MODEL, new ModelMatterBlock(Blocks.fire.getDefaultState()));
 
 		IMatterType matterType = matter.getValue(DefaultMatterProperties.TYPE);
 		IMatterForm matterForm = matter.getValue(DefaultMatterProperties.FORM);
+
+		if (matterType == null || matterForm == null) return ;
+
 
 		if (matterType == DefaultMatterTypes.WOOD || matterType.isVariantOf(DefaultMatterTypes.WOOD, true))
 		{
@@ -155,7 +161,7 @@ public class MovableMatterCraft
 
 			if (type != null)
 			{
-				if (matterForm == DefaultMatterForms.BLOCK) event.setMatterModel(new ModelMatterBlock(Blocks.planks.getDefaultState().withProperty(BlockPlanks.VARIANT, type)));
+				if (matterForm == DefaultMatterForms.BLOCK) matter.withProperty(DefaultMatterProperties.MODEL, new ModelMatterBlock(Blocks.planks.getDefaultState().withProperty(BlockPlanks.VARIANT, type)));
 			}
 		}
 
@@ -170,27 +176,161 @@ public class MovableMatterCraft
 
 			if (type != null)
 			{
-				if (matterForm == DefaultMatterForms.BLOCK) event.setMatterModel(new ModelMatterBlock(Blocks.stone.getDefaultState().withProperty(BlockStone.VARIANT, type)));
+				if (matterForm == DefaultMatterForms.BLOCK) matter.withProperty(DefaultMatterProperties.MODEL, new ModelMatterBlock(Blocks.stone.getDefaultState().withProperty(BlockStone.VARIANT, type)));
 			}
 		}
 
 
 		else if (matterType == DefaultMatterTypes.IRON)
 		{
-			if (matterForm == DefaultMatterForms.BLOCK) event.setMatterModel(new ModelMatterBlock(Blocks.iron_block.getDefaultState()));
-			else if (matterForm == DefaultMatterForms.INGOT) event.setMatterModel(new ModelMatterIngot(new ResourceLocation(MovableMatterCraft.SHORT_MODID +":textures/matter/ingot/iron.png")));
+			if (matterForm == DefaultMatterForms.BLOCK) matter.withProperty(DefaultMatterProperties.MODEL, new ModelMatterBlock(Blocks.iron_block.getDefaultState()));
+			else if (matterForm == DefaultMatterForms.INGOT) matter.withProperty(DefaultMatterProperties.MODEL, new ModelMatterIngot(new ResourceLocation(MovableMatterCraft.SHORT_MODID + ":textures/matter/ingot/iron.png")));
 		}
 
 		else if (matterType == DefaultMatterTypes.GOLD)
 		{
-			if (matterForm == DefaultMatterForms.BLOCK) event.setMatterModel(new ModelMatterBlock(Blocks.gold_block.getDefaultState()));
-			else if (matterForm == DefaultMatterForms.INGOT) event.setMatterModel(new ModelMatterIngot(new ResourceLocation(MovableMatterCraft.SHORT_MODID +":textures/matter/ingot/gold.png")));
+			if (matterForm == DefaultMatterForms.BLOCK) matter.withProperty(DefaultMatterProperties.MODEL, new ModelMatterBlock(Blocks.gold_block.getDefaultState()));
+			else if (matterForm == DefaultMatterForms.INGOT) matter.withProperty(DefaultMatterProperties.MODEL, new ModelMatterIngot(new ResourceLocation(MovableMatterCraft.SHORT_MODID + ":textures/matter/ingot/gold.png")));
 		}
 
 		else if (matterType == DefaultMatterTypes.DIAMOND)
 		{
-			if (matterForm == DefaultMatterForms.BLOCK) event.setMatterModel(new ModelMatterBlock(Blocks.diamond_block.getDefaultState()));
+			if (matterForm == DefaultMatterForms.BLOCK) matter.withProperty(DefaultMatterProperties.MODEL, new ModelMatterBlock(Blocks.diamond_block.getDefaultState()));
 		}
+
+	}
+
+
+	@SubscribeEvent
+	public void onMatterConvertToItemStack(MatterConvertEvent.ToItemStack event)
+	{
+		IMatter matter = event.getMatter();
+		IMatterType matterType = matter.getValue(DefaultMatterProperties.TYPE);
+		IMatterForm matterForm = matter.getValue(DefaultMatterProperties.FORM);
+		int amount = matter.getValue(DefaultMatterProperties.AMOUNT);
+
+		if (matterType == null || matterForm == null || amount == 0) return ;
+
+
+		if (matterType == DefaultMatterTypes.WOOD || matterType.isVariantOf(DefaultMatterTypes.WOOD, true))
+		{
+			BlockPlanks.EnumType type = DefaultMatterTypes.WOOD_MAPPINGS.inverse().get(matterType);
+
+			if (type != null)
+			{
+				if (matterForm == DefaultMatterForms.BLOCK)
+				{
+					Block block = Blocks.planks;
+					IBlockState blockState = block.getDefaultState().withProperty(BlockPlanks.VARIANT, type);
+					event.setItemStack(new ItemStack(blockState.getBlock(), amount, block.getMetaFromState(blockState)));
+				}
+			}
+		}
+
+		else if (matterType == DefaultMatterTypes.STONE || matterType.isVariantOf(DefaultMatterTypes.STONE, true))
+		{
+			BlockStone.EnumType type = DefaultMatterTypes.STONE_MAPPINGS.inverse().get(matterType);
+
+			if (type != null)
+			{
+				if (matterForm == DefaultMatterForms.BLOCK)
+				{
+					Block block = Blocks.stone;
+					IBlockState blockState = block.getDefaultState().withProperty(BlockStone.VARIANT, type);
+					event.setItemStack(new ItemStack(blockState.getBlock(), amount, block.getMetaFromState(blockState)));
+				}
+			}
+		}
+
+
+		else if (matterType == DefaultMatterTypes.IRON)
+		{
+			if (matterForm == DefaultMatterForms.BLOCK) event.setItemStack(new ItemStack(Blocks.iron_block, amount));
+			else if (matterForm == DefaultMatterForms.INGOT) event.setItemStack(new ItemStack(Items.iron_ingot, amount));
+		}
+
+		else if (matterType == DefaultMatterTypes.GOLD)
+		{
+			if (matterForm == DefaultMatterForms.BLOCK) event.setItemStack(new ItemStack(Blocks.gold_block, amount));
+			else if (matterForm == DefaultMatterForms.INGOT) event.setItemStack(new ItemStack(Items.gold_ingot, amount));
+		}
+
+		else if (matterType == DefaultMatterTypes.DIAMOND)
+		{
+			if (matterForm == DefaultMatterForms.BLOCK) event.setItemStack(new ItemStack(Blocks.diamond_block, amount));
+		}
+
+
+	}
+
+
+	@SubscribeEvent
+	public void onMatterConvertToMatter(MatterConvertEvent.ToMatter event)
+	{
+		ItemStack stack = event.getItemStack();
+		int amount = stack.stackSize;
+
+		if (stack == null || amount == 0) return ;
+
+		Item item = stack.getItem();
+		int meta = item.getMetadata(stack);
+
+		if (item instanceof ItemBlock)
+		{
+			if (item == Item.getItemFromBlock(Blocks.planks))
+			{
+				IBlockState blockState = Blocks.planks.getStateFromMeta(meta);
+
+				if (blockState != null)
+				{
+					IMatterType type = DefaultMatterTypes.WOOD_MAPPINGS.get(blockState.getValue(BlockPlanks.VARIANT));
+
+					if (type != null)
+					{
+						event.setMatter(new Matter().withProperty(DefaultMatterProperties.TYPE, type).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.BLOCK));
+					}
+				}
+			}
+
+			else if (item == Item.getItemFromBlock(Blocks.stone))
+			{
+				IBlockState blockState = Blocks.stone.getStateFromMeta(meta);
+
+				if (blockState != null)
+				{
+					IMatterType type = DefaultMatterTypes.STONE_MAPPINGS.get(blockState.getValue(BlockStone.VARIANT));
+
+					if (type != null)
+					{
+						event.setMatter(new Matter().withProperty(DefaultMatterProperties.TYPE, type).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.BLOCK));
+					}
+				}
+			}
+
+			else if (item == Item.getItemFromBlock(Blocks.iron_block))
+			{
+				event.setMatter(new Matter().withProperty(DefaultMatterProperties.TYPE, DefaultMatterTypes.IRON).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.BLOCK));
+			}
+
+			else if (item == Item.getItemFromBlock(Blocks.gold_block))
+			{
+				event.setMatter(new Matter().withProperty(DefaultMatterProperties.TYPE, DefaultMatterTypes.GOLD).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.BLOCK));
+			}
+
+			else if (item == Item.getItemFromBlock(Blocks.diamond_block))
+			{
+				event.setMatter(new Matter().withProperty(DefaultMatterProperties.TYPE, DefaultMatterTypes.GOLD).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.BLOCK));
+			}
+
+		}
+
+		else
+		{
+			if (item == Items.iron_ingot) event.setMatter(new Matter().withProperty(DefaultMatterProperties.TYPE, DefaultMatterTypes.IRON).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.INGOT));
+			else if (item == Items.gold_ingot) event.setMatter(new Matter().withProperty(DefaultMatterProperties.TYPE, DefaultMatterTypes.GOLD).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.INGOT));
+
+		}
+
 
 	}
 
