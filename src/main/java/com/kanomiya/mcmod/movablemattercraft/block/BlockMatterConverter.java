@@ -29,7 +29,7 @@ public class BlockMatterConverter extends Block
 		super(Material.rock);
 
 		setCreativeTab(MovableMatterCraft.tab);
-		setRegistryName(new ResourceLocation(MovableMatterCraft.MODID, "blockMatterConverter"));
+		setRegistryName(new ResourceLocation(MovableMatterCraft.DOMAIN_NAME, "blockMatterConverter"));
 		setUnlocalizedName("blockMatterConverter");
 		setHardness(0.5f);
 	}

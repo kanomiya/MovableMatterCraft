@@ -2,10 +2,10 @@
 {
   "modid": "com.kanomiya.mcmod.movablemattercraft",
   "name": "Movable Matter Craft",
-  "description": "WIP",
+  "description": "Entity Matter Mod and API",
   "version": "${version}",
   "mcversion": "${mcversion}",
-  "url": "",
+  "url": "https://github.com/kanomiya/MovableMatterCraft",
   "authorList": ["Kanomiya"]
 }
 ]

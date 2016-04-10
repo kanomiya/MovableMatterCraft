@@ -22,7 +22,7 @@ public class DefaultMatterModelRenders
 {
 	public static class ResourceLocations
 	{
-		public static final ResourceLocation resourceBox = new ResourceLocation(MovableMatterCraft.SHORT_MODID, "textures/matter/modelBox.png");
+		public static final ResourceLocation resourceBox = new ResourceLocation(MovableMatterCraft.DOMAIN_NAME, "textures/matter/modelBox.png");
 	}
 
 	public static class Models

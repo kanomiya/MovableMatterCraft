@@ -3,6 +3,8 @@
 itemGroup.com.kanomiya.mcmod.movablemattercraft=Movable Matter Craft
 
 item.itemMatter.name=物質
+tile.blockMatterConverter.name=変換機
+tile.blockMatterCutter.name=切断機
 
 matter=組成
 matter.form=形状

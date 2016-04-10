@@ -51,8 +51,8 @@ import com.kanomiya.mcmod.movablemattercraft.registry.MatterRegistry;
 @Mod(modid = MovableMatterCraft.MODID)
 public class MovableMatterCraft
 {
-	public static final String SHORT_MODID = "movablemattercraft";
-	public static final String MODID = "com.kanomiya.mcmod." + MovableMatterCraft.SHORT_MODID;
+	public static final String DOMAIN_NAME = "movablemattercraft";
+	public static final String MODID = "com.kanomiya.mcmod." + MovableMatterCraft.DOMAIN_NAME;
 
 	@Mod.Instance(MODID)
 	public static MovableMatterCraft instance;
@@ -96,7 +96,10 @@ public class MovableMatterCraft
 		{
 			RenderingRegistry.registerEntityRenderingHandler(EntityMatter.class, RenderMatter::new);
 			// ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMatter.class, new TESRMatter());
-			ModelLoader.setCustomModelResourceLocation(MovableMatterCraft.itemMatter, 0, new ModelResourceLocation(MovableMatterCraft.SHORT_MODID + ":itemMatter", "inventory"));
+
+			ModelLoader.setCustomModelResourceLocation(MovableMatterCraft.itemMatter, 0, new ModelResourceLocation(MovableMatterCraft.DOMAIN_NAME + ":itemMatter", "inventory"));
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(MovableMatterCraft.blockMatterConverter), 0, new ModelResourceLocation(MovableMatterCraft.DOMAIN_NAME + ":blockMatterConverter", "inventory"));
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(MovableMatterCraft.blockMatterCutter), 0, new ModelResourceLocation(MovableMatterCraft.DOMAIN_NAME + ":blockMatterCutter", "inventory"));
 
 			ForgeHooksClient.renderTileItem(itemMatter, 0);
 
@@ -147,7 +150,7 @@ public class MovableMatterCraft
 
 		if (matterForm == DefaultMatterForms.INGOT)
 		{
-			String key = MovableMatterCraft.SHORT_MODID + ":textures/matter/ingot/" + matterType.getUnlocalizedName() + ".png";
+			String key = MovableMatterCraft.DOMAIN_NAME + ":textures/matter/ingot/" + matterType.getUnlocalizedName() + ".png";
 			matter.withProperty(DefaultMatterProperties.MODEL, new ModelMatterIngot(new ResourceLocation(key)));
 
 		}

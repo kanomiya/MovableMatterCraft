@@ -34,7 +34,7 @@ public class BlockMatterCutter extends Block
 		super(Material.rock);
 
 		setCreativeTab(MovableMatterCraft.tab);
-		setRegistryName(new ResourceLocation(MovableMatterCraft.MODID, "blockMatterCutter"));
+		setRegistryName(new ResourceLocation(MovableMatterCraft.DOMAIN_NAME, "blockMatterCutter"));
 		setUnlocalizedName("blockMatterCutter");
 		setHardness(0.5f);
 	}
