@@ -27,7 +27,6 @@ import com.kanomiya.mcmod.movablemattercraft.entity.EntityMatter;
 import com.kanomiya.mcmod.movablemattercraft.matter.property.DefaultMatterProperties;
 import com.kanomiya.mcmod.movablemattercraft.matter.property.form.IMatterForm;
 import com.kanomiya.mcmod.movablemattercraft.matter.property.type.IMatterType;
-import com.kanomiya.mcmod.movablemattercraft.registry.MatterRegistry;
 
 /**
  * @author Kanomiya
@@ -51,9 +50,9 @@ public class ItemMatter extends Item
 	public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems)
 	{
 
-		for (IMatterType type: MatterRegistry.typeRegistry.values())
+		for (IMatterType type: MovableMatterCraftAPI.typeRegistry.values())
 		{
-			for (IMatterForm form: MatterRegistry.formRegistry.values())
+			for (IMatterForm form: MovableMatterCraftAPI.formRegistry.values())
 			{
 				ItemStack stack = new ItemStack(this, 1, 0);
 

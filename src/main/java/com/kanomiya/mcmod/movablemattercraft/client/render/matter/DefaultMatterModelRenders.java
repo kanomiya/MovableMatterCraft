@@ -67,7 +67,8 @@ public class DefaultMatterModelRenders
 		{
 			GlStateManager.pushMatrix();
 
-			GlStateManager.translate(x -0.5d, y, z -0.5d);
+			GlStateManager.translate(x, y, z);
+			GlStateManager.translate(-0.34d, 0d, -0.34d);
 
 			GlStateManager.scale(0.0625d, 0.0625d, 0.0625d);
 			// model.render(entity, 0,0,0,0,0, 1f);
@@ -94,11 +95,13 @@ public class DefaultMatterModelRenders
 				}
 
 				GlStateManager.popMatrix();
-				GlStateManager.pushMatrix();
 
+				GlStateManager.pushMatrix();
 				if (4 <= amount)
 				{
-					GlStateManager.translate(0d, 3d, 2d);
+					double oz1 = (amount < 7) ? 0d : 2d;
+
+					GlStateManager.translate(0d, 3d, oz1 +2d);
 					modelIngot.render(entity, 0, 0, 0, 0, 0, 1f);
 
 
@@ -110,10 +113,34 @@ public class DefaultMatterModelRenders
 				}
 				GlStateManager.popMatrix();
 
+				GlStateManager.pushMatrix();
 				if (6 <= amount)
 				{
-					GlStateManager.translate(0d, 6d, 4d);
+					double oy1 = (amount < 7) ? 0d : -3d;
+					double oz1 = (amount < 7) ? 0d : -4d;
+
+					GlStateManager.translate(0d, oy1 +6d, oz1 +4d);
 					modelIngot.render(entity, 0, 0, 0, 0, 0, 1f);
+				}
+				GlStateManager.popMatrix();
+
+				if (7 <= amount)
+				{
+					GlStateManager.translate(0d, 6d, 6d);
+					modelIngot.render(entity, 0, 0, 0, 0, 0, 1f);
+
+					if (8 <= amount)
+					{
+						GlStateManager.translate(0d, 0d, -4d);
+						modelIngot.render(entity, 0, 0, 0, 0, 0, 1f);
+
+
+						if (9 <= amount)
+						{
+							GlStateManager.translate(0d, 3d, 2d);
+							modelIngot.render(entity, 0, 0, 0, 0, 0, 1f);
+						}
+					}
 				}
 
 			}

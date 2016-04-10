@@ -4,7 +4,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -17,7 +16,6 @@ import com.kanomiya.mcmod.movablemattercraft.MovableMatterCraft;
 import com.kanomiya.mcmod.movablemattercraft.api.MovableMatterCraftAPI;
 import com.kanomiya.mcmod.movablemattercraft.api.matter.IMatter;
 import com.kanomiya.mcmod.movablemattercraft.api.matter.event.MatterConvertEvent;
-import com.kanomiya.mcmod.movablemattercraft.entity.EntityMatter;
 import com.kanomiya.mcmod.movablemattercraft.matter.property.DefaultMatterProperties;
 
 /**
@@ -54,13 +52,7 @@ public class BlockMatterConverter extends Block
 					if (stack.stackSize <= 0) stack = null;
 					if (matter.getValue(DefaultMatterProperties.AMOUNT) <= 0) playerIn.setHeldItem(hand, null);
 
-					playerIn.setHeldItem(hand, null);
-
-					if (! worldIn.isRemote)
-					{
-						InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY() +1d, pos.getZ(), stack);
-					}
-
+					playerIn.setHeldItem(hand, stack);
 				}
 
 			} else
@@ -83,15 +75,7 @@ public class BlockMatterConverter extends Block
 
 						stackMatter.deserializeNBT(newMatter.serializeNBT());
 
-						EntityMatter newEntity = new EntityMatter(worldIn, pos.getX() +hitX, pos.getY() +Math.min(hitY +0.5d, 1.2d), pos.getZ() +hitZ, newStack);
-						newEntity.motionX = 0.3d < RANDOM.nextDouble() ? 0.1d : 0d;
-						newEntity.motionY = 0.1d + Math.max(RANDOM.nextDouble() -0.6d, 0d);
-						newEntity.motionZ = 0.3d < RANDOM.nextDouble() ? 0.1d : 0d;
-
-						if (! worldIn.isRemote)
-						{
-							worldIn.spawnEntityInWorld(newEntity);
-						}
+						playerIn.setHeldItem(hand, newStack);
 
 						-- heldItem.stackSize;
 						if (heldItem.stackSize == 0) playerIn.setHeldItem(hand, null);

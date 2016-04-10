@@ -47,7 +47,6 @@ import com.kanomiya.mcmod.movablemattercraft.matter.property.type.DefaultMatterT
 import com.kanomiya.mcmod.movablemattercraft.matter.property.type.IMatterType;
 import com.kanomiya.mcmod.movablemattercraft.network.PacketHandler;
 import com.kanomiya.mcmod.movablemattercraft.registry.MatterRegistry;
-import com.kanomiya.mcmod.movablemattercraft.tileentity.TileEntityMatterCutter;
 
 @Mod(modid = MovableMatterCraft.MODID)
 public class MovableMatterCraft
@@ -82,8 +81,6 @@ public class MovableMatterCraft
 		GameRegistry.register(new ItemBlock(blockMatterConverter).setRegistryName(blockMatterConverter.getRegistryName()));
 		GameRegistry.register(blockMatterCutter);
 		GameRegistry.register(new ItemBlock(blockMatterCutter).setRegistryName(blockMatterCutter.getRegistryName()));
-
-		GameRegistry.registerTileEntity(TileEntityMatterCutter.class, MovableMatterCraft.MODID + ":tileEntityMatterCutter");
 
 		int eId = -1;
 		EntityRegistry.registerModEntity(EntityMatter.class, "entityMatter", ++eId, MovableMatterCraft.instance, 64, 1, false);
@@ -306,7 +303,6 @@ public class MovableMatterCraft
 
 	}
 
-
 	@SubscribeEvent
 	public void onMatterConvertToMatter(MatterConvertEvent.ToMatter event)
 	{
@@ -372,7 +368,7 @@ public class MovableMatterCraft
 			{
 				int actualAmount = Math.min(amount, DefaultMatterForms.BLOCK.getMaxAmount());
 				stack.stackSize -= actualAmount;
-				event.setMatter(new Matter().withProperty(DefaultMatterProperties.TYPE, DefaultMatterTypes.GOLD).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.BLOCK).withProperty(DefaultMatterProperties.AMOUNT, actualAmount));
+				event.setMatter(new Matter().withProperty(DefaultMatterProperties.TYPE, DefaultMatterTypes.DIAMOND).withProperty(DefaultMatterProperties.FORM, DefaultMatterForms.BLOCK).withProperty(DefaultMatterProperties.AMOUNT, actualAmount));
 			}
 
 		}
@@ -396,5 +392,8 @@ public class MovableMatterCraft
 
 
 	}
+
+
+
 
 }

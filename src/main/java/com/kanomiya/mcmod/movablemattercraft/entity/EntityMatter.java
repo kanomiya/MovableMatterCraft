@@ -15,6 +15,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants.NBT;
@@ -65,14 +66,14 @@ public class EntityMatter extends Entity
 		setMatterStack(matterStack);
 	}
 
-	public EntityMatter(World worldIn, double posX, double posY, double posZ, IMatter iMatter)
+	public EntityMatter(World worldIn, double posX, double posY, double posZ, IMatter matter)
 	{
 		this(worldIn, posX, posY, posZ);
 
 		ItemStack matterStack = new ItemStack(MovableMatterCraft.itemMatter, 1, 0);
 		if (MovableMatterCraftAPI.hasMatter(matterStack, null))
 		{
-			MovableMatterCraftAPI.getMatter(matterStack, null).deserializeNBT(iMatter.serializeNBT());;
+			MovableMatterCraftAPI.getMatter(matterStack, null).deserializeNBT(matter.serializeNBT());;
 		}
 
 		setMatterStack(matterStack);
@@ -90,6 +91,12 @@ public class EntityMatter extends Entity
 	@Override
 	public void onUpdate()
 	{
+		if (! hasMatterStack())
+		{
+			setDead();
+			return ;
+		}
+
 		super.onUpdate();
 
 		prevPosX = posX;
@@ -97,6 +104,7 @@ public class EntityMatter extends Entity
 		prevPosZ = posZ;
 		motionY -= 0.03999999910593033D;
 		noClip = pushOutOfBlocks(posX, (getEntityBoundingBox().minY + getEntityBoundingBox().maxY) / 2.0D, posZ);
+
 		moveEntity(motionX, motionY, motionZ);
 		boolean flag = (int)prevPosX != (int)posX || (int)prevPosY != (int)posY || (int)prevPosZ != (int)posZ;
 
@@ -289,6 +297,13 @@ public class EntityMatter extends Entity
 		return hasMatterStack() && MovableMatterCraftAPI.hasMatter(getMatterStack(), null) ? MovableMatterCraftAPI.getMatter(getMatterStack(), null) : null;
 	}
 
+	@Override
+	public ItemStack getPickedResult(RayTraceResult target)
+	{
+		if (hasMatterStack()) return getMatterStack().copy();
+		return null;
+	}
+
 
 	/**
 	* @inheritDoc
@@ -307,5 +322,7 @@ public class EntityMatter extends Entity
 	{
 		if (hasMatterStack()) nbt.setTag("matterStack", getMatterStack().serializeNBT());
 	}
+
+
 
 }

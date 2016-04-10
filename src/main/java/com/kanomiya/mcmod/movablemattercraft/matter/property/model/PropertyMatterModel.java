@@ -6,10 +6,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 
 import com.kanomiya.mcmod.movablemattercraft.MovableMatterCraft;
+import com.kanomiya.mcmod.movablemattercraft.api.MovableMatterCraftAPI;
 import com.kanomiya.mcmod.movablemattercraft.api.matter.IMatter;
 import com.kanomiya.mcmod.movablemattercraft.api.matter.event.MatterModelBakeEvent;
 import com.kanomiya.mcmod.movablemattercraft.api.matter.property.IMatterProperty;
-import com.kanomiya.mcmod.movablemattercraft.registry.MatterRegistry;
 
 /**
  * @author Kanomiya
@@ -31,7 +31,7 @@ public class PropertyMatterModel implements IMatterProperty<IMatterModel>
 	public NBTTagCompound serializeNBT(IMatterModel value)
 	{
 		NBTTagCompound nbt = new NBTTagCompound();
-		ResourceLocation id = MatterRegistry.modelRegistry.inverse().get(value);
+		ResourceLocation id = MovableMatterCraftAPI.modelRegistry.inverse().get(value);
 
 		nbt.setString("id", id == null ? "null" : id.toString());
 		nbt.setTag("args", value.serializeNBT());
@@ -49,7 +49,7 @@ public class PropertyMatterModel implements IMatterProperty<IMatterModel>
 		{
 			NBTTagCompound compound = (NBTTagCompound) nbt;
 
-			Class<? extends IMatterModel> clazz = MatterRegistry.modelRegistry.get(new ResourceLocation(compound.getString("id")));
+			Class<? extends IMatterModel> clazz = MovableMatterCraftAPI.modelRegistry.get(new ResourceLocation(compound.getString("id")));
 			if (clazz != null)
 			{
 				try
