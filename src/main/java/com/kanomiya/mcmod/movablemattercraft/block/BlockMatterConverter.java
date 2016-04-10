@@ -48,11 +48,12 @@ public class BlockMatterConverter extends Block
 				MinecraftForge.EVENT_BUS.post(event);
 
 				ItemStack stack = event.getItemStack();
-				if (stack.stackSize <= 0) stack = null;
-				if (matter.getValue(DefaultMatterProperties.AMOUNT) <= 0) playerIn.setHeldItem(hand, null);
 
 				if (stack != null)
 				{
+					if (stack.stackSize <= 0) stack = null;
+					if (matter.getValue(DefaultMatterProperties.AMOUNT) <= 0) playerIn.setHeldItem(hand, null);
+
 					playerIn.setHeldItem(hand, null);
 
 					if (! worldIn.isRemote)
@@ -73,11 +74,11 @@ public class BlockMatterConverter extends Block
 
 					IMatter newMatter = event.getMatter();
 
-					if (heldItem.stackSize <= 0) playerIn.setHeldItem(hand, null);
-					if (newMatter.getValue(DefaultMatterProperties.AMOUNT) <= 0) newMatter = null;
-
 					if (newMatter != null)
 					{
+						if (heldItem.stackSize <= 0) playerIn.setHeldItem(hand, null);
+						if (newMatter.getValue(DefaultMatterProperties.AMOUNT) <= 0) newMatter = null;
+
 						IMatter stackMatter = MovableMatterCraftAPI.getMatter(newStack, null);
 
 						stackMatter.deserializeNBT(newMatter.serializeNBT());
