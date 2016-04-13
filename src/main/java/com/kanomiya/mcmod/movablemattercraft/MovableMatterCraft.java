@@ -11,9 +11,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
@@ -28,7 +25,6 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import com.kanomiya.mcmod.movablemattercraft.api.matter.IMatter;
 import com.kanomiya.mcmod.movablemattercraft.api.matter.event.MatterConvertEvent;
@@ -110,19 +106,6 @@ public class MovableMatterCraft
 	public void init(FMLInitializationEvent event)
 	{
 		PacketHandler.init();
-
-		for (IRecipe recipe: CraftingManager.getInstance().getRecipeList())
-		{
-			if (recipe instanceof ShapedOreRecipe)
-			{
-
-			}
-			else if (recipe instanceof ShapelessRecipes)
-			{
-
-			}
-		}
-
 	}
 
 
