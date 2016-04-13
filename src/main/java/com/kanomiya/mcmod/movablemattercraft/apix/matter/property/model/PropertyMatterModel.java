@@ -3,25 +3,16 @@ package com.kanomiya.mcmod.movablemattercraft.apix.matter.property.model;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
 
-import com.kanomiya.mcmod.movablemattercraft.api.matter.IMatter;
-import com.kanomiya.mcmod.movablemattercraft.api.matter.event.MatterModelBakeEvent;
-import com.kanomiya.mcmod.movablemattercraft.api.matter.property.IMatterProperty;
+import com.kanomiya.mcmod.movablemattercraft.api.property.ISimpleProperty;
 import com.kanomiya.mcmod.movablemattercraft.apix.MovableMatterCraftAPIX;
 
 /**
  * @author Kanomiya
  *
  */
-public class PropertyMatterModel implements IMatterProperty<IMatterModel>
+public class PropertyMatterModel extends ISimpleProperty<IMatterModel>
 {
-
-	public void fireBakeModel(IMatter matter)
-	{
-		MatterModelBakeEvent event = new MatterModelBakeEvent(matter);
-		MinecraftForge.EVENT_BUS.post(event);
-	}
 
 	/**
 	* @inheritDoc

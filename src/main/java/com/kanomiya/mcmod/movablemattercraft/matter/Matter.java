@@ -9,7 +9,8 @@ import net.minecraft.util.ResourceLocation;
 import com.google.common.collect.Maps;
 import com.kanomiya.mcmod.movablemattercraft.api.MovableMatterCraftAPI;
 import com.kanomiya.mcmod.movablemattercraft.api.matter.IMatter;
-import com.kanomiya.mcmod.movablemattercraft.api.matter.property.IMatterProperty;
+import com.kanomiya.mcmod.movablemattercraft.api.property.IProperty;
+import com.kanomiya.mcmod.movablemattercraft.apix.matter.event.MatterPropertyEventFactory;
 import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.DefaultMatterProperties;
 
 /**
@@ -18,7 +19,7 @@ import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.DefaultMatterP
  */
 public class Matter implements IMatter
 {
-	protected Map<IMatterProperty, Object> properties;
+	protected Map<IProperty, Object> properties;
 
 	public Matter()
 	{
@@ -28,22 +29,22 @@ public class Matter implements IMatter
 	}
 
 	@Override
-	public <T> boolean hasProperty(IMatterProperty<T> property)
+	public <T> boolean hasProperty(IProperty<T> property)
 	{
 		return properties.containsKey(property);
 	}
 
 	@Override
-	public <T> T getValue(IMatterProperty<T> property)
+	public <T> T getValue(IProperty<T> property)
 	{
 		return (T) properties.get(property);
 	}
 
 	@Override
-	public <T> Matter withProperty(IMatterProperty<T> property, T value)
+	public <T> Matter withProperty(IProperty<T> property, T value)
 	{
 		properties.put(property, value);
-		property.onAdded(this, value);
+		MatterPropertyEventFactory.fireChangeProperty(this, property, value);
 		return this;
 	}
 
@@ -57,7 +58,7 @@ public class Matter implements IMatter
 	}
 
 	@Override
-	public void addInformation(List<String> tooltip)
+	public void addInformation(List<String> tooltip, boolean advanced)
 	{
 
 	}
@@ -71,7 +72,7 @@ public class Matter implements IMatter
 		NBTTagCompound nbt = new NBTTagCompound();
 		NBTTagCompound nbtProperties = new NBTTagCompound();
 
-		for (IMatterProperty property: properties.keySet())
+		for (IProperty property: properties.keySet())
 		{
 			ResourceLocation id = MovableMatterCraftAPI.propertyRegistry.inverse().get(property);
 			nbtProperties.setTag(id == null ? "null" : id.toString(), property.serializeNBT(properties.get(property)));
@@ -94,7 +95,7 @@ public class Matter implements IMatter
 		{
 			ResourceLocation id = new ResourceLocation(key);
 
-			IMatterProperty property = MovableMatterCraftAPI.propertyRegistry.get(id);
+			IProperty property = MovableMatterCraftAPI.propertyRegistry.get(id);
 
 			if (property != null)
 			{

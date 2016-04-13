@@ -4,23 +4,15 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.ResourceLocation;
 
-import com.kanomiya.mcmod.movablemattercraft.api.matter.IMatter;
-import com.kanomiya.mcmod.movablemattercraft.api.matter.property.IMatterProperty;
+import com.kanomiya.mcmod.movablemattercraft.api.property.ISimpleProperty;
 import com.kanomiya.mcmod.movablemattercraft.apix.MovableMatterCraftAPIX;
-import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.DefaultMatterProperties;
 
 /**
  * @author Kanomiya
  *
  */
-public class PropertyMatterType implements IMatterProperty<IMatterType>
+public class PropertyMatterType extends ISimpleProperty<IMatterType>
 {
-	@Override
-	public void onAdded(IMatter matter, IMatterType value)
-	{
-		DefaultMatterProperties.MODEL.fireBakeModel(matter);
-	}
-
 	/**
 	* @inheritDoc
 	*/

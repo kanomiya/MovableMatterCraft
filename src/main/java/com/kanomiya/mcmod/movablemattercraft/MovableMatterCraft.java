@@ -11,6 +11,9 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
@@ -25,11 +28,15 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import com.kanomiya.mcmod.movablemattercraft.api.matter.IMatter;
 import com.kanomiya.mcmod.movablemattercraft.api.matter.event.MatterConvertEvent;
-import com.kanomiya.mcmod.movablemattercraft.api.matter.event.MatterModelBakeEvent;
+import com.kanomiya.mcmod.movablemattercraft.api.property.IProperty;
 import com.kanomiya.mcmod.movablemattercraft.apix.MovableMatterCraftAPIX;
+import com.kanomiya.mcmod.movablemattercraft.apix.matter.event.MatterBakeEvent;
+import com.kanomiya.mcmod.movablemattercraft.apix.matter.event.MatterPropertyChangeEvent;
+import com.kanomiya.mcmod.movablemattercraft.apix.matter.event.MatterPropertyEventFactory;
 import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.DefaultMatterProperties;
 import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.form.IMatterForm;
 import com.kanomiya.mcmod.movablemattercraft.apix.matter.property.type.IMatterType;
@@ -104,16 +111,20 @@ public class MovableMatterCraft
 	{
 		PacketHandler.init();
 
+		for (IRecipe recipe: CraftingManager.getInstance().getRecipeList())
+		{
+			if (recipe instanceof ShapedOreRecipe)
+			{
+
+			}
+			else if (recipe instanceof ShapelessRecipes)
+			{
+
+			}
+		}
 
 	}
 
-	/*
-	@SubscribeEvent
-	public void onModelBake(ModelBakeEvent event)
-	{
-		event.getModelRegistry().putObject();
-	}
-	*/
 
 	@SubscribeEvent
 	public void onAttachItemCapabilities(AttachCapabilitiesEvent.Item event)
@@ -123,7 +134,7 @@ public class MovableMatterCraft
 	}
 
 	@SubscribeEvent
-	public void onMatterModelBake(MatterModelBakeEvent event)
+	public void onMatterModelBake(MatterBakeEvent.Model event)
 	{
 		IMatter matter = event.getMatter();
 		matter.withProperty(DefaultMatterProperties.MODEL, new ModelMatterBlock(Blocks.fire.getDefaultState()));
@@ -190,7 +201,6 @@ public class MovableMatterCraft
 		}
 
 	}
-
 
 	@SubscribeEvent
 	public void onMatterConvertToItemStack(MatterConvertEvent.ToItemStack event)
@@ -402,6 +412,18 @@ public class MovableMatterCraft
 
 	}
 
+	@SubscribeEvent
+	public void onMatterPropertyChange(MatterPropertyChangeEvent event)
+	{
+		IMatter matter = event.getMatter();
+		IProperty prop = event.getProperty();
+
+		if (prop.hasProperty(DefaultMatterProperties.Advanced.BAKE_MODEL) && prop.getValue(DefaultMatterProperties.Advanced.BAKE_MODEL))
+		{
+			MatterPropertyEventFactory.fireBakeModel(matter);
+		}
+
+	}
 
 
 

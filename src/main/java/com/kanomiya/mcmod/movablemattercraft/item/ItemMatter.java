@@ -90,7 +90,7 @@ public class ItemMatter extends Item
 		if (MovableMatterCraftAPI.hasMatter(stack, null))
 		{
 			IMatter iMatter = MovableMatterCraftAPI.getMatter(stack, null);
-			iMatter.addInformation(tooltip);
+			iMatter.addInformation(tooltip, advanced);
 		}
 
 	}

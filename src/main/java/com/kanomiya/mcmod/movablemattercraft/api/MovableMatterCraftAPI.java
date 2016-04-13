@@ -9,7 +9,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.kanomiya.mcmod.movablemattercraft.api.matter.IMatter;
-import com.kanomiya.mcmod.movablemattercraft.api.matter.property.IMatterProperty;
+import com.kanomiya.mcmod.movablemattercraft.api.property.IProperty;
 
 /**
  * @author Kanomiya
@@ -20,7 +20,7 @@ public class MovableMatterCraftAPI
 	@CapabilityInject(IMatter.class)
 	public static final Capability<IMatter> capMatter = null;
 
-	public static final BiMap<ResourceLocation, IMatterProperty> propertyRegistry = HashBiMap.create();
+	public static final BiMap<ResourceLocation, IProperty> propertyRegistry = HashBiMap.create();
 
 	/**
 	 * ICapabilityProviderがIMatterのインスタンスを持つかどうか判定する<br>

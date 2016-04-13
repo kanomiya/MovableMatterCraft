@@ -10,16 +10,16 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 
 import com.kanomiya.mcmod.movablemattercraft.api.MovableMatterCraftAPI;
-import com.kanomiya.mcmod.movablemattercraft.api.matter.property.IMatterPropertyDispatcher;
+import com.kanomiya.mcmod.movablemattercraft.api.property.IPropertyDispatcher;
 
 /**
  * @author Kanomiya
  *
  */
-public interface IMatter extends ICapabilityProvider, INBTSerializable<NBTTagCompound>, IMatterPropertyDispatcher
+public interface IMatter extends ICapabilityProvider, INBTSerializable<NBTTagCompound>, IPropertyDispatcher
 {
 	String getDisplayName();
-	void addInformation(List<String> tooltip);
+	void addInformation(List<String> tooltip, boolean advanced);
 
 	/**
 	* @inheritDoc

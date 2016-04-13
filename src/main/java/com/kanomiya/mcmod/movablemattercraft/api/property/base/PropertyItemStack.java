@@ -1,18 +1,17 @@
-package com.kanomiya.mcmod.movablemattercraft.apix.matter.property.item;
+package com.kanomiya.mcmod.movablemattercraft.api.property.base;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 
-import com.kanomiya.mcmod.movablemattercraft.api.matter.property.IMatterProperty;
+import com.kanomiya.mcmod.movablemattercraft.api.property.ISimpleProperty;
 
 /**
  * @author Kanomiya
  *
  */
-public class PropertyMatterItemStack implements IMatterProperty<ItemStack>
+public class PropertyItemStack extends ISimpleProperty<ItemStack>
 {
-
 	/**
 	* @inheritDoc
 	*/

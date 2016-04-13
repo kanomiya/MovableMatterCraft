@@ -1,15 +1,15 @@
-package com.kanomiya.mcmod.movablemattercraft.apix.matter.property;
+package com.kanomiya.mcmod.movablemattercraft.api.property.base;
+
+import com.kanomiya.mcmod.movablemattercraft.api.property.ISimpleProperty;
 
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagInt;
-
-import com.kanomiya.mcmod.movablemattercraft.api.matter.property.IMatterProperty;
 
 /**
  * @author Kanomiya
  *
  */
-public class PropertyInt implements IMatterProperty<Integer>
+public class PropertyInt extends ISimpleProperty<Integer>
 {
 
 	/**
