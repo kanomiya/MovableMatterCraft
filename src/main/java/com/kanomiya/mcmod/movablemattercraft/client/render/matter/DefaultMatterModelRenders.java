@@ -50,7 +50,7 @@ public class DefaultMatterModelRenders
 			// GlStateManager.scale(0.0625d, 0.0625d, 0.0625d);
 			// model.render(entity, 0,0,0,0,0, 1f);
 
-			renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+			renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
 			BlockRendererDispatcher disp = Minecraft.getMinecraft().getBlockRendererDispatcher();
 			GlStateManager.translate(0d, 0, 1d);

@@ -85,7 +85,7 @@ public class EntityMatter extends Entity
 	@Override
 	protected void entityInit()
 	{
-		dataWatcher.register(MATTER_STACK, Optional.of(new ItemStack(MovableMatterCraft.itemMatter, 1, 0)));
+		dataManager.register(MATTER_STACK, Optional.of(new ItemStack(MovableMatterCraft.itemMatter, 1, 0)));
 	}
 
 	@Override
@@ -110,12 +110,12 @@ public class EntityMatter extends Entity
 
 		if (flag || ticksExisted % 25 == 0)
 		{
-			if (worldObj.getBlockState(new BlockPos(this)).getMaterial() == Material.lava)
+			if (worldObj.getBlockState(new BlockPos(this)).getMaterial() == Material.LAVA)
 			{
 				motionY = 0.20000000298023224D;
 				motionX = (rand.nextFloat() - rand.nextFloat()) * 0.2F;
 				motionZ = (rand.nextFloat() - rand.nextFloat()) * 0.2F;
-				playSound(SoundEvents.entity_generic_burn, 0.4F, 2.0F + rand.nextFloat() * 0.4F);
+				playSound(SoundEvents.ENTITY_GENERIC_BURN, 0.4F, 2.0F + rand.nextFloat() * 0.4F);
 			}
 
 		}
@@ -279,17 +279,17 @@ public class EntityMatter extends Entity
 
 	public boolean hasMatterStack()
 	{
-		return dataWatcher.get(MATTER_STACK).isPresent();
+		return dataManager.get(MATTER_STACK).isPresent();
 	}
 
 	public ItemStack getMatterStack()
 	{
-		return dataWatcher.get(MATTER_STACK).get();
+		return dataManager.get(MATTER_STACK).get();
 	}
 
 	public void setMatterStack(ItemStack stack)
 	{
-		dataWatcher.set(MATTER_STACK, Optional.of(stack));
+		dataManager.set(MATTER_STACK, Optional.of(stack));
 	}
 
 	public IMatter getMatter()

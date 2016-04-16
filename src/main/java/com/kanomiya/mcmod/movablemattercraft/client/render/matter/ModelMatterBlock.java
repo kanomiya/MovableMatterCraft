@@ -19,7 +19,7 @@ public class ModelMatterBlock implements IMatterModel<EntityMatter, ModelMatterB
 
 	public ModelMatterBlock()
 	{
-		this(Blocks.gravel.getDefaultState());
+		this(Blocks.GRAVEL.getDefaultState());
 	}
 
 	public ModelMatterBlock(IBlockState blockState)

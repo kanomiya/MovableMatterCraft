@@ -153,7 +153,7 @@ public class ItemMatter extends Item
 				EntityMatter entity = new EntityMatter(worldIn, raytraceresult.hitVec.xCoord, raytraceresult.hitVec.yCoord, raytraceresult.hitVec.zCoord);
 				entity.rotationYaw = playerIn.rotationYaw;
 
-				if (!worldIn.getCubes(entity, entity.getEntityBoundingBox().expandXyz(-0.1D)).isEmpty())
+				if (!worldIn.getCollisionBoxes(entity, entity.getEntityBoundingBox().expandXyz(-0.1D)).isEmpty())
 				{
 					return new ActionResult(EnumActionResult.FAIL, itemStackIn);
 				}
@@ -173,7 +173,7 @@ public class ItemMatter extends Item
 						--itemStackIn.stackSize;
 					}
 
-					playerIn.addStat(StatList.func_188057_b(this));
+					playerIn.addStat(StatList.getObjectUseStats(this));
 					return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);
 				}
 			}

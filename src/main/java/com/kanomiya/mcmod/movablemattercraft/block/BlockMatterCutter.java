@@ -32,7 +32,7 @@ public class BlockMatterCutter extends Block
 {
 	public BlockMatterCutter()
 	{
-		super(Material.rock);
+		super(Material.ROCK);
 
 		setCreativeTab(MovableMatterCraft.tab);
 		setRegistryName(new ResourceLocation(MovableMatterCraftAPIX.DOMAIN_NAME, "blockMatterCutter"));
